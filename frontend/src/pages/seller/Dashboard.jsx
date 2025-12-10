@@ -5,13 +5,11 @@ import { AiOutlineDollar } from "react-icons/ai";
 import { LuTags } from "react-icons/lu";
 import { FaRegStar } from "react-icons/fa";
 import ReviewCard from "../../components/seller/ReviewCard";
+import { useContext } from "react";
+import { StoreContext } from "../../context/StoreContext";
 
 const Dashboard = () => {
-  const [dashboardData, setDashboardData] = useState(null);
-
-  const fetchDashboardData = async () => {
-    setDashboardData(dummyDashboard);
-  };
+  const { fetchDashboardData, dashboardData } = useContext(StoreContext);
 
   useEffect(() => {
     fetchDashboardData();
@@ -44,7 +42,7 @@ const Dashboard = () => {
                   Total Earnings
                 </h3>
                 <span className="text-2xl font-medium">
-                  ${dashboardData?.totalEarnings}
+                  ${dashboardData?.totalEarnings.toLocaleString()}
                 </span>
               </div>
               <div className="h-12 w-12 p-2.5 bg-gray-200 rounded-full overflow-hidden flex items-center justify-center">
