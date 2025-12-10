@@ -154,18 +154,22 @@ const Navbar = ({ setShowLogin }) => {
             />
           </div>
 
-          <div
-            onClick={() => navigate("/cart")}
-            className="flex items-center gap-3 cursor-pointer transition-colors hover:text-green-600"
-          >
-            <div className="relative">
-              <span className="absolute -top-2 -right-2 h-5 w-5 flex items-center justify-center rounded-full bg-gray-700 text-xs text-white">
-                {calculateTotalCartQuantity(allCarts)}
-              </span>
-              <FiShoppingCart className="h-6 w-6" />
+          {authUser && (
+            <div
+              onClick={() => navigate("/cart")}
+              className="flex items-center gap-3 cursor-pointer transition-colors hover:text-green-600"
+            >
+              <div className="relative">
+                {calculateTotalCartQuantity(allCarts) > 0 && (
+                  <span className="absolute -top-2 -right-2 h-5 w-5 flex items-center justify-center rounded-full bg-gray-700 text-xs text-white">
+                    {calculateTotalCartQuantity(allCarts)}
+                  </span>
+                )}
+                <FiShoppingCart className="h-6 w-6" />
+              </div>
+              <span className="text-gray-600 font-medium">Cart</span>
             </div>
-            <span className="text-gray-600 font-medium">Cart</span>
-          </div>
+          )}
 
           {renderUserSection()}
         </div>
