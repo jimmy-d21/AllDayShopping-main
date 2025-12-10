@@ -66,22 +66,16 @@ const Orders = () => {
                         handleUpdateStatusOrder(order._id, e.target.value)
                       }
                     >
-                      {["ORDER_PLACED", "PROCESSING", "SHIPPED", "DELIVERED"]
-                        .filter((status) => {
-                          // Hide ORDER_PLACED if current status is not ORDER_PLACED
-                          if (
-                            status === "ORDER_PLACED" &&
-                            order.status !== "ORDER_PLACED"
-                          ) {
-                            return false;
-                          }
-                          return true;
-                        })
-                        .map((option) => (
-                          <option key={option} value={option}>
-                            {option}
-                          </option>
-                        ))}
+                      {[
+                        "ORDER_PLACED",
+                        "PROCESSING",
+                        "SHIPPED",
+                        "DELIVERED",
+                      ].map((option) => (
+                        <option key={option} value={option}>
+                          {option}
+                        </option>
+                      ))}
                     </select>
                   </td>
 
