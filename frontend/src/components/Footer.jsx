@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaRegEnvelope } from "react-icons/fa6";
 import { FiPhone } from "react-icons/fi";
@@ -7,8 +7,10 @@ import { SlSocialFacebook } from "react-icons/sl";
 import { FaInstagram } from "react-icons/fa";
 import { SlSocialTwitter } from "react-icons/sl";
 import { FiLinkedin } from "react-icons/fi";
+import UserContext from "../context/userContext";
 
 const Footer = () => {
+  const { authUser } = useContext(UserContext);
   const navigate = useNavigate();
   return (
     <div className="max-w-[1300px] mx-auto flex flex-col">
@@ -61,12 +63,14 @@ const Footer = () => {
               </li>
               <li className="text-sm text-gray-500">Privacy Policy</li>
               <li className="text-sm text-gray-500">Become Plus Member</li>
-              <li
-                onClick={() => navigate("/create-store")}
-                className="text-sm text-gray-500 cursor-pointer hover:underline"
-              >
-                Create Your Store
-              </li>
+              {authUser?.role !== "seller" && (
+                <li
+                  onClick={() => navigate("/create-store")}
+                  className="text-sm text-gray-500 cursor-pointer hover:underline"
+                >
+                  Create Your Store
+                </li>
+              )}
             </ul>
           </div>
           <div className="flex flex-col gap-3">

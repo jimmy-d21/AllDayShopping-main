@@ -1,13 +1,11 @@
 import React, { useContext, useEffect } from "react";
 import { FaLongArrowAltRight } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import { dummyOrders } from "../assets/assets";
 import OrderCard from "../components/OrderCard";
 import OrderContext from "../context/OrderContext";
 
 const OrderPage = () => {
   const { allOrders, fetchAllOrders } = useContext(OrderContext);
-  const orders = allOrders;
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -38,7 +36,7 @@ const OrderPage = () => {
             <h3 className="pr-5">Status</h3>
           </div>
           <div className="w-full flex flex-col gap-5 my-8">
-            {orders.map((order) => (
+            {allOrders.map((order) => (
               <OrderCard key={order?._id} order={order} />
             ))}
           </div>

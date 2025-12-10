@@ -9,11 +9,11 @@ const ProductCard = ({ product }) => {
       onClick={() => navigate(`/product/${product?._id}`)}
       className="w-full flex flex-col gap-3 cursor-pointer"
     >
-      <div className="h-70 w-full flex items-center justify-center bg-gray-100 rounded-md">
+      <div className="h-70 p-8 w-full flex items-center justify-center bg-gray-100 rounded-md">
         <img
           src={product?.image}
           alt=""
-          className="w-35 h-35 cursor-pointer transition-all duration-300 hover:scale-110"
+          className="w-full h-full cursor-pointer transition-all duration-300 hover:scale-110"
         />
       </div>
       <div className="w-full flex flex-col gap-2 text-sm">

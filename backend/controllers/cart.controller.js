@@ -55,31 +55,26 @@ export const updateQuantityCart = async (req, res) => {
     const userId = req.userId;
     const { cartQuantity } = req.body;
 
-    const user = await User.findById(userId);
-    if (!user) {
-      return res.status(400).json({ error: "User not found" });
-    }
-
-    let cart = await Cart.findOne({ _id: cartId, owner: userId }).populate(
-      "product"
-    );
-    if (!cart) return res.status(404).json({ error: "Cart item not found" });
-
-    // Check if the quantity is not less than in you cart quantity
     if (cartQuantity < 1) {
       return res.status(400).json({ error: "Invalid quantity" });
     }
 
-    // Check the product if exxist in carts
+    const cart = await Cart.findOne({
+      _id: cartId,
+      owner: userId,
+    }).populate("product");
+
+    if (!cart) return res.status(404).json({ error: "Cart item not found" });
+
     cart.quantity = cartQuantity;
     cart.totalPrice = cart.product.price * cartQuantity;
+
     await cart.save();
+
     res.status(200).json(cart);
   } catch (error) {
-    console.error("Update Cart Quantity Error:", error.message);
-    return res
-      .status(500)
-      .json({ error: "Something went wrong. Please try again." });
+    console.error("Update Cart Error:", error.message);
+    res.status(500).json({ error: "Server error" });
   }
 };
 
@@ -88,27 +83,19 @@ export const removeFromCart = async (req, res) => {
     const { cartId } = req.params;
     const userId = req.userId;
 
-    const user = await User.findById(userId);
-    if (!user) {
-      return res.status(400).json({ error: "User not found" });
-    }
-
     const cart = await Cart.findById(cartId);
+    if (!cart) return res.status(404).json({ error: "Cart not found" });
 
-    if (cart.owner.toString() !== user._id.toString()) {
-      return res.status(400).json({
-        error: "You are not the owner of this carts you can't remove this cart",
-      });
+    if (cart.owner.toString() !== userId.toString()) {
+      return res.status(403).json({ error: "Not your cart item" });
     }
 
     await Cart.findByIdAndDelete(cartId);
 
-    res.status(201).json({ message: "Remove successfully" });
+    res.status(200).json({ message: "Remove successfully" });
   } catch (error) {
     console.error("Remove Cart Error:", error.message);
-    return res
-      .status(500)
-      .json({ error: "Something went wrong. Please try again." });
+    res.status(500).json({ error: "Server error" });
   }
 };
 

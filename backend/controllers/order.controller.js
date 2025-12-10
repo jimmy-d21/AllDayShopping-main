@@ -7,31 +7,56 @@ export const addOrder = async (req, res) => {
     const { paymentMethod, address } = req.body;
     const userId = req.userId;
 
-    const carts = await Cart.find({ owner: userId }).populate("product");
-
-    if (carts.length > 0) {
-      for (let i = 0; i < carts.length; i++) {
-        const newOrder = new Order({
-          owner: userId,
-          sendTo: carts[i].storeOwner,
-          product: carts[i].product._id,
-          quantity: carts[i].quantity,
-          total: carts[i].quantity * carts[i].product.price,
-          price: carts[i].product.price,
-          address,
-          paymentMethod,
-        });
-        await Cart.deleteMany({ owner: userId }); // delete all cart
-        let product = await Product.findById(carts[i].product);
-        product.totalOrders += carts[i].quantity; // add the quantity to increase the totalOrder
-        await product.save(); // save to database
-        await newOrder.save(); // save to data base
-      }
-    } else {
-      return res.status(404).json({ error: "You dont have cart items" });
+    // Validate address
+    if (
+      !address?.name ||
+      !address?.email ||
+      !address?.street ||
+      !address?.city ||
+      !address?.state ||
+      !address?.zip ||
+      !address?.country ||
+      !address?.phone
+    ) {
+      return res.status(400).json({ error: "Complete address is required" });
     }
 
-    res.status(200).json({ carts, message: "Order Successfully." });
+    // Get all user's carts
+    const carts = await Cart.find({ owner: userId }).populate("product");
+
+    if (!carts || carts.length === 0) {
+      return res
+        .status(404)
+        .json({ error: "You don't have items in your cart" });
+    }
+
+    // Create orders for each cart item
+    for (const cart of carts) {
+      const newOrder = new Order({
+        owner: userId,
+        sendTo: cart.storeOwner,
+        product: cart.product._id,
+        quantity: cart.quantity,
+        price: cart.product.price,
+        total: cart.quantity * cart.product.price,
+        address,
+        paymentMethod,
+      });
+
+      // Update product total orders
+      const product = await Product.findById(cart.product._id);
+      product.totalOrders += cart.quantity;
+      await product.save();
+
+      await newOrder.save();
+    }
+
+    // Clear cart AFTER creating orders
+    await Cart.deleteMany({ owner: userId });
+
+    res.status(200).json({
+      message: "Order Successfully placed.",
+    });
   } catch (error) {
     console.error("Add Order error:", error.message);
     return res.status(500).json({

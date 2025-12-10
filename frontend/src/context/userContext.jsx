@@ -90,6 +90,21 @@ export const UserContextProvider = ({ children }) => {
     }
   };
 
+  const fetchAddAddress = async (address) => {
+    try {
+      const { data } = await axios.put(
+        `${BACKEND_URL}/api/user/add-address`,
+        address,
+        { withCredentials: true }
+      );
+
+      toast.success(data.message);
+      fetchAuthUser();
+    } catch (error) {
+      toast.error(error.response?.data?.error || "Something went wrong.");
+    }
+  };
+
   const value = {
     authUser,
     loading,
@@ -97,6 +112,7 @@ export const UserContextProvider = ({ children }) => {
     fetchLoginAccount,
     fetchAuthUser,
     fetchLogoutAccount,
+    fetchAddAddress,
   };
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;

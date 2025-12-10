@@ -1,6 +1,6 @@
+// context/OrderContext.js
 import { createContext, useState } from "react";
 import axios from "axios";
-import toast from "react-hot-toast";
 
 const OrderContext = createContext();
 
@@ -12,17 +12,31 @@ export const OrderContextProvider = ({ children }) => {
     try {
       const { data } = await axios.get(
         `${BACKEND_URL}/api/orders/get-all-user-orders`,
-        {
-          withCredentials: true,
-        }
+        { withCredentials: true }
       );
       setAllOrders(data.orders);
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   };
-  const value = { allOrders, fetchAllOrders };
+
+  const fetchAddOrder = async (paymentMethod, address) => {
+    try {
+      await axios.post(
+        `${BACKEND_URL}/api/orders/add-order`,
+        { paymentMethod, address },
+        { withCredentials: true }
+      );
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  };
 
   return (
-    <OrderContext.Provider value={value}>{children}</OrderContext.Provider>
+    <OrderContext.Provider value={{ allOrders, fetchAllOrders, fetchAddOrder }}>
+      {children}
+    </OrderContext.Provider>
   );
 };
 

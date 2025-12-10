@@ -6,6 +6,7 @@ const CartContext = createContext();
 
 export const CartContextProvider = ({ children }) => {
   const BACKEND_URL = "http://localhost:5000";
+
   const [allCarts, setAllCarts] = useState([]);
   const [cartTotals, setCartTotals] = useState({
     subtotal: 0,
@@ -18,9 +19,7 @@ export const CartContextProvider = ({ children }) => {
     try {
       const { data } = await axios.get(
         `${BACKEND_URL}/api/carts/all-cart-item`,
-        {
-          withCredentials: true,
-        }
+        { withCredentials: true }
       );
       setAllCarts(data);
     } catch (error) {
@@ -33,12 +32,10 @@ export const CartContextProvider = ({ children }) => {
       await axios.post(
         `${BACKEND_URL}/api/carts/add-cart/${productId}`,
         { quantity },
-        {
-          withCredentials: true,
-        }
+        { withCredentials: true }
       );
-      toast.success(`Add Cart Successfully`);
-      await fetchAllCarts();
+      toast.success("Added to cart!");
+      fetchAllCarts();
     } catch (error) {
       toast.error(error.response?.data?.error || error.message);
     }
@@ -46,12 +43,14 @@ export const CartContextProvider = ({ children }) => {
 
   const fetchRemoveCartItem = async (cartId) => {
     try {
-      const { data } = await axios.delete(
-        `${BACKEND_URL}/api/carts/remove-cart/${cartId}`,
-        { withCredentials: true }
-      );
-      setAllCarts((prev) => prev.filter((cart) => cart._id !== cartId));
-      toast.success(data.message);
+      await axios.delete(`${BACKEND_URL}/api/carts/remove-cart/${cartId}`, {
+        withCredentials: true,
+      });
+
+      setAllCarts((prev) => prev.filter((c) => c._id !== cartId));
+
+      toast.success("Removed from cart");
+      fetchCartTotals();
     } catch (error) {
       toast.error(error.response?.data?.error || error.message);
     }
@@ -64,10 +63,13 @@ export const CartContextProvider = ({ children }) => {
         { cartQuantity },
         { withCredentials: true }
       );
+
       setAllCarts((prevCarts) =>
-        prevCarts.map((cart) => (cart._id === cartId ? data : prevCarts))
+        prevCarts.map((cart) => (cart._id === cartId ? data : cart))
       );
-      await fetchCartTotals();
+
+      fetchCartTotals();
+      return data;
     } catch (error) {
       toast.error(error.response?.data?.error || error.message);
     }
@@ -84,16 +86,22 @@ export const CartContextProvider = ({ children }) => {
     }
   };
 
-  const value = {
-    allCarts,
-    fetchAllCarts,
-    fetchAddCartItem,
-    fetchRemoveCartItem,
-    fetchUpdateQuantityCartItem,
-    cartTotals,
-    fetchCartTotals,
-  };
-  return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
+  return (
+    <CartContext.Provider
+      value={{
+        allCarts,
+        fetchAllCarts,
+        fetchAddCartItem,
+        fetchRemoveCartItem,
+        fetchUpdateQuantityCartItem,
+        cartTotals,
+        fetchCartTotals,
+        setAllCarts,
+      }}
+    >
+      {children}
+    </CartContext.Provider>
+  );
 };
 
 export default CartContext;
