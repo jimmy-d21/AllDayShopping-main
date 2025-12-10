@@ -39,7 +39,9 @@ const ManageProduct = () => {
                   <td className="px-4 py-3 max-w-[300px] truncate">
                     {product?.description}
                   </td>
-                  <td className="px-4 py-3 font-medium">${product?.price}</td>
+                  <td className="px-4 py-3 font-medium">
+                    ${product?.price.toLocaleString()}
+                  </td>
                   <td className="px-4 py-3">
                     <div
                       className={`w-12 py-1 px-1 rounded-full flex items-center transition-all duration-300 ${
