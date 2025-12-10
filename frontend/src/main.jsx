@@ -5,15 +5,18 @@ import { BrowserRouter } from "react-router-dom";
 import { UserContextProvider } from "./context/userContext.jsx";
 import { ProductContextProvider } from "./context/ProductContext.jsx";
 import { CartContextProvider } from "./context/CartContext.jsx";
+import { OrderContextProvider } from "./context/OrderContext.jsx";
 
 createRoot(document.getElementById("root")).render(
   <BrowserRouter>
-    <CartContextProvider>
-      <ProductContextProvider>
-        <UserContextProvider>
-          <App />
-        </UserContextProvider>
-      </ProductContextProvider>
-    </CartContextProvider>
+    <OrderContextProvider>
+      <CartContextProvider>
+        <ProductContextProvider>
+          <UserContextProvider>
+            <App />
+          </UserContextProvider>
+        </ProductContextProvider>
+      </CartContextProvider>
+    </OrderContextProvider>
   </BrowserRouter>
 );

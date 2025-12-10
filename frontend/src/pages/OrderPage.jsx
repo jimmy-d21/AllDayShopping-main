@@ -1,12 +1,18 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import { FaLongArrowAltRight } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { dummyOrders } from "../assets/assets";
 import OrderCard from "../components/OrderCard";
+import OrderContext from "../context/OrderContext";
 
 const OrderPage = () => {
-  const orders = dummyOrders;
+  const { allOrders, fetchAllOrders } = useContext(OrderContext);
+  const orders = allOrders;
   const navigate = useNavigate();
+
+  useEffect(() => {
+    fetchAllOrders();
+  }, []);
   return (
     <div className="min-h-screen max-w-[1300px] mx-auto">
       <div className="flex flex-col w-[80%]">

@@ -15,7 +15,7 @@ const OrderCard = ({ order }) => {
             <img
               src={order?.product?.image}
               alt=""
-              className="w-15 h-15 transition-all duration-300 hover:scale-110"
+              className="w-18 h-18 transition-all duration-300 hover:scale-110"
             />
           </div>
           <div className="flex flex-col gap-0">
