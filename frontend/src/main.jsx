@@ -6,17 +6,20 @@ import { UserContextProvider } from "./context/userContext.jsx";
 import { ProductContextProvider } from "./context/ProductContext.jsx";
 import { CartContextProvider } from "./context/CartContext.jsx";
 import { OrderContextProvider } from "./context/OrderContext.jsx";
+import StoreContextProvider from "./context/StoreContext.jsx";
 
 createRoot(document.getElementById("root")).render(
   <BrowserRouter>
-    <OrderContextProvider>
-      <CartContextProvider>
-        <ProductContextProvider>
-          <UserContextProvider>
-            <App />
-          </UserContextProvider>
-        </ProductContextProvider>
-      </CartContextProvider>
-    </OrderContextProvider>
+    <StoreContextProvider>
+      <OrderContextProvider>
+        <CartContextProvider>
+          <ProductContextProvider>
+            <UserContextProvider>
+              <App />
+            </UserContextProvider>
+          </ProductContextProvider>
+        </CartContextProvider>
+      </OrderContextProvider>
+    </StoreContextProvider>
   </BrowserRouter>
 );

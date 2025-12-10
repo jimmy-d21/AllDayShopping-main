@@ -28,7 +28,7 @@ export const adminUpprove = async (req, res) => {
         error: "UnAuthorized to cofirm the request only Admin can cofirm this.",
       });
     }
-
+    store.requestStatus = "approve";
     ownerStoreUser.role = "seller";
     store.isActive = true;
 
