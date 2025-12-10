@@ -55,12 +55,16 @@ const ProductDetails = ({ setShowLogin }) => {
       <div className="flex flex-col mt-5">
         <div className="flex gap-2">
           <div className="flex flex-col">
-            <div className="w-25 h-25 flex items-center justify-center overflow-hidden bg-gray-100 rounded-md">
-              <img src={productDetails?.image} alt="" className="w-15 h-15" />
+            <div className="w-25 h-25 p-3 flex items-center justify-center overflow-hidden bg-gray-100 rounded-md">
+              <img
+                src={productDetails?.image}
+                alt=""
+                className="w-full h-full"
+              />
             </div>
           </div>
-          <div className="w-120 h-120 flex items-center justify-center overflow-hidden bg-gray-100 rounded-md mr-10">
-            <img src={productDetails?.image} alt="" className="w-70 h-70" />
+          <div className="w-120 h-120 p-15 flex items-center justify-center overflow-hidden bg-gray-100 rounded-md mr-10">
+            <img src={productDetails?.image} alt="" className="w-full h-full" />
           </div>
           <div className="flex-1">
             <h1 className="text-3xl font-semibold">{productDetails?.name}</h1>

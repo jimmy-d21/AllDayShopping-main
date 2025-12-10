@@ -1,11 +1,13 @@
 import { createContext, useState, useEffect } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const UserContext = createContext();
 
 export const UserContextProvider = ({ children }) => {
   const BACKEND_URL = "http://localhost:5000";
+  const navigate = useNavigate();
   const [authUser, setAuthUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -85,6 +87,7 @@ export const UserContextProvider = ({ children }) => {
       );
       toast.success(data.message);
       setAuthUser(null);
+      navigate("/");
     } catch (error) {
       toast.error(error.response?.data?.error || error.message);
     }
