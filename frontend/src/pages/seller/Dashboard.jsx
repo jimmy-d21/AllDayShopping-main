@@ -77,14 +77,16 @@ const Dashboard = () => {
             </div>
           </div>
         </div>
-        <div className="w-full flex flex-col gap-10">
-          <h1 className="text-md font-medium text-gray-500">Total Reviews</h1>
-          <div className="w-full flex flex-col gap-5">
-            {dashboardData?.reviews.map((review) => (
-              <ReviewCard key={review._id} review={review} />
-            ))}
+        {dashboardData?.reviews.length > 0 && (
+          <div className="w-full flex flex-col gap-10">
+            <h1 className="text-md font-medium text-gray-500">Total Reviews</h1>
+            <div className="w-full flex flex-col gap-5">
+              {dashboardData?.reviews.map((review) => (
+                <ReviewCard key={review._id} review={review} />
+              ))}
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
