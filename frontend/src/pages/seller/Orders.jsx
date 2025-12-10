@@ -2,10 +2,27 @@ import React, { useEffect, useState } from "react";
 import { formatOrderDate } from "../../utils/formatOrderDate";
 import { useContext } from "react";
 import { StoreContext } from "../../context/StoreContext";
+import OrderContext from "../../context/OrderContext";
+import toast from "react-hot-toast";
 
 const Orders = () => {
   const { storeOrders, setStoreOrders, fetchAllStoreOrders } =
     useContext(StoreContext);
+
+  const { fetchUpdateStatusOrder } = useContext(OrderContext);
+
+  const handleUpdateStatusOrder = async (orderId, option) => {
+    try {
+      const updatedOrder = await fetchUpdateStatusOrder(orderId, option);
+      setStoreOrders((prevOrders) =>
+        prevOrders.map((order) =>
+          order._id === orderId ? updatedOrder : order
+        )
+      );
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
 
   useEffect(() => {
     fetchAllStoreOrders();
@@ -37,22 +54,37 @@ const Orders = () => {
                 <tr key={order?._id}>
                   <td className="px-4 py-3 text-green-600">{index + 1}</td>
                   <td className="px-4 py-3">{order?.owner?.username}</td>
-                  <td className="px-4 py-3 font-semibold">${order?.total}</td>
+                  <td className="px-4 py-3 font-semibold">
+                    ${order?.total.toLocaleString()}
+                  </td>
                   <td className="px-4 py-3">{order?.paymentMethod}</td>
                   <td className="px-4 py-3">
-                    <select className="outline-none">
-                      {[
-                        "ORDER_PLACED",
-                        "PROCESSING",
-                        "SHIPPED",
-                        "DELIVERED",
-                      ].map((option) => (
-                        <option key={option} value={option.toLowerCase()}>
-                          {option}
-                        </option>
-                      ))}
+                    <select
+                      className="outline-none"
+                      value={order.status}
+                      onChange={(e) =>
+                        handleUpdateStatusOrder(order._id, e.target.value)
+                      }
+                    >
+                      {["ORDER_PLACED", "PROCESSING", "SHIPPED", "DELIVERED"]
+                        .filter((status) => {
+                          // Hide ORDER_PLACED if current status is not ORDER_PLACED
+                          if (
+                            status === "ORDER_PLACED" &&
+                            order.status !== "ORDER_PLACED"
+                          ) {
+                            return false;
+                          }
+                          return true;
+                        })
+                        .map((option) => (
+                          <option key={option} value={option}>
+                            {option}
+                          </option>
+                        ))}
                     </select>
                   </td>
+
                   <td className="px-4 py-3">
                     {formatOrderDate(order?.createdAt)}
                   </td>

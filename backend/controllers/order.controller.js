@@ -84,7 +84,10 @@ export const updateStatusOrder = async (req, res) => {
     const { orderId } = req.params;
     const { status } = req.body;
 
-    let order = await Order.findById(orderId);
+    let order = await Order.findById(orderId).populate({
+      path: "owner",
+      select: "-password",
+    });
     if (!order) {
       return res.status(404).json({ error: "Order not found" });
     }

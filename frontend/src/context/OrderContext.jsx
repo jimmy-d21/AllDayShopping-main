@@ -1,6 +1,7 @@
 // context/OrderContext.js
 import { createContext, useState } from "react";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 const OrderContext = createContext();
 
@@ -33,8 +34,30 @@ export const OrderContextProvider = ({ children }) => {
     }
   };
 
+  const fetchUpdateStatusOrder = async (orderId, status) => {
+    try {
+      const { data } = await axios.put(
+        `${BACKEND_URL}/api/orders/update-status-order/${orderId}`,
+        { status },
+        { withCredentials: true }
+      );
+      toast.success(data.message);
+      return data.order;
+    } catch (error) {
+      toast.error(error.response?.data?.error || error.message);
+      throw error;
+    }
+  };
+
   return (
-    <OrderContext.Provider value={{ allOrders, fetchAllOrders, fetchAddOrder }}>
+    <OrderContext.Provider
+      value={{
+        allOrders,
+        fetchAllOrders,
+        fetchAddOrder,
+        fetchUpdateStatusOrder,
+      }}
+    >
       {children}
     </OrderContext.Provider>
   );
