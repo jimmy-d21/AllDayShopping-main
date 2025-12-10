@@ -79,7 +79,7 @@ const ProductDetails = ({ setShowLogin }) => {
               </span>
             </div>
             <h3 className="text-2xl text-gray-800 mt-8 font-semibold">
-              ${productDetails?.price}
+              ${productDetails?.price.toLocaleString()}
             </h3>
             <p className="mt-8 mb-3 text-md font-semibold">Quantity :</p>
             <div className="flex items-center">
