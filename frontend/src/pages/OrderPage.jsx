@@ -17,7 +17,7 @@ const OrderPage = () => {
         <div className="flex flex-col gap-3 my-15">
           <h1 className="text-2xl text-gray-950 font-semibold">My Orders</h1>
           <p className="text-gray-600 text-md  flex items-center gap-2">
-            Showing total 2 orders{" "}
+            Showing total {allOrders.length} orders{" "}
             <span
               onClick={() => navigate("/")}
               className="text-green-500 text-sm  flex items-center gap-2 cursor-pointer"
