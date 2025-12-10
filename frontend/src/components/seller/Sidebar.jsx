@@ -5,14 +5,18 @@ import { FaRegPlusSquare } from "react-icons/fa";
 import { useLocation, useNavigate } from "react-router-dom";
 import { FaEdit } from "react-icons/fa";
 import { MdViewList } from "react-icons/md";
+import { useContext } from "react";
+import { StoreContext } from "../../context/StoreContext";
 
 const Sidebar = () => {
+  const { fetchUserStore } = useContext(StoreContext);
   const [storeData, setStoreData] = useState(null);
   const navigate = useNavigate();
   const { pathname } = useLocation(); // ✅ FIXED
 
   const fetchStoreUser = async () => {
-    setStoreData(dummyStoreUser);
+    const store = await fetchUserStore();
+    setStoreData(store);
   };
 
   useEffect(() => {

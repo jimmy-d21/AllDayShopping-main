@@ -87,6 +87,18 @@ const StoreContextProvider = ({ children }) => {
     } catch (error) {}
   };
 
+  const fetchUserStore = async () => {
+    try {
+      const { data } = await axios.get(
+        `${BACKEND_URL}/api/stores/seller-user`,
+        { withCredentials: true }
+      );
+      return data;
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
   const value = {
     fetchCreateStore,
     fetchDashboardData,
@@ -97,6 +109,7 @@ const StoreContextProvider = ({ children }) => {
     storeOrders,
     setStoreOrders,
     fetchAllStoreOrders,
+    fetchUserStore,
   };
 
   return (
