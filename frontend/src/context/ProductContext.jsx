@@ -67,7 +67,22 @@ export const ProductContextProvider = ({ children }) => {
         { withCredentials: true }
       );
       return data;
-    } catch (error) {}
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
+  const fetchRatingProduct = async (productId, orderId, comment, rating) => {
+    try {
+      const { data } = await axios.put(
+        `${BACKEND_URL}/api/products/rates-products/${productId}/${orderId}`,
+        { comment, rating },
+        { withCredentials: true }
+      );
+      return data.order;
+    } catch (error) {
+      toast.error(error.message);
+    }
   };
 
   const value = {
@@ -79,6 +94,7 @@ export const ProductContextProvider = ({ children }) => {
     fetchAllProducts,
     fetchProductsDetails,
     fetchCreateProduct,
+    fetchRatingProduct,
   };
 
   return (

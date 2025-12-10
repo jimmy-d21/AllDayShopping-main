@@ -3,6 +3,7 @@ import Product from "../models/product.model.js";
 import User from "../models/user.model.js";
 import getShuffledProducts from "../lib/utils/shuffledProducts.js";
 import Store from "../models/store.model.js";
+import Order from "../models/order.model.js";
 
 export const addProduct = async (req, res) => {
   const userId = req.userId;
@@ -187,7 +188,7 @@ export const viewProductDetails = async (req, res) => {
 export const rateProduct = async (req, res) => {
   try {
     const { comment, rating } = req.body;
-    const { productId } = req.params;
+    const { productId, orderId } = req.params;
     const userId = req.userId;
 
     if (!comment || !rating) {
@@ -199,9 +200,14 @@ export const rateProduct = async (req, res) => {
       return res.status(400).json({ error: "User not found" });
     }
 
+    let order = await Order.findById(orderId).populate("owner product");
+    if (!order) {
+      return res.status(400).json({ error: "Order not found" });
+    }
+
     let product = await Product.findById(productId).populate("reviews.user");
     if (!product) {
-      return res.status(400).json({ error: "User not found" });
+      return res.status(400).json({ error: "Product not found" });
     }
 
     if (product.owner.toString() === user._id.toString()) {
@@ -215,10 +221,13 @@ export const rateProduct = async (req, res) => {
       product: productId,
     };
 
+    order.rate = rating;
+    await order.save();
+
     product.reviews.push(newReview);
     await product.save();
 
-    res.status(200).json({ message: "Rating Successfully", product });
+    res.status(200).json({ message: "Rating Successfully", order });
   } catch (error) {
     console.error("Rate Products error:", error.message);
     return res.status(500).json({

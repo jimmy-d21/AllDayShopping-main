@@ -1,13 +1,28 @@
 import React, { useState } from "react";
 import { IoMdClose } from "react-icons/io";
 import { FaStar } from "react-icons/fa";
+import { useContext } from "react";
+import ProductContext from "../context/ProductContext";
+import OrderContext from "../context/OrderContext";
 
 const RateProduct = ({ order, setOpen }) => {
+  const { fetchRatingProduct } = useContext(ProductContext);
+  const { setAllOrders } = useContext(OrderContext);
   const [ratings, setRatings] = useState(0);
   const [text, setText] = useState("");
 
   const handleProductRatings = async () => {
-    console.log(`Rate: ${ratings}, Comment: ${text}`);
+    const productId = order?.product?._id;
+    const orderId = order?._id;
+    const updatedOrder = await fetchRatingProduct(
+      productId,
+      orderId,
+      text,
+      ratings
+    );
+    setAllOrders((prevOrders) =>
+      prevOrders.map((order) => (order._id === orderId ? updatedOrder : order))
+    );
     setOpen(false);
   };
 

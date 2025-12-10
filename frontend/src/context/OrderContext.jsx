@@ -56,6 +56,7 @@ export const OrderContextProvider = ({ children }) => {
         fetchAllOrders,
         fetchAddOrder,
         fetchUpdateStatusOrder,
+        setAllOrders,
       }}
     >
       {children}

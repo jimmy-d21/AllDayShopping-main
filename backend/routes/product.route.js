@@ -22,6 +22,6 @@ productRoutes.get("/latest-products", getLatestProducts);
 productRoutes.get("/best-selling-products", getBestSellingProducts);
 productRoutes.get("/all-products", getAllProducts);
 productRoutes.get("/view-product-details/:productId", viewProductDetails);
-productRoutes.put("/rates-products/:productId", authUser, rateProduct);
+productRoutes.put("/rates-products/:productId/:orderId", authUser, rateProduct);
 
 export default productRoutes;
