@@ -1,9 +1,13 @@
-import React, { useEffect, useState } from "react";
-import { useContext } from "react";
+import React, { useEffect, useContext } from "react";
 import { StoreContext } from "../../context/StoreContext";
 
 const ManageProduct = () => {
-  const { fetchAllStoreProducts, storeProducts } = useContext(StoreContext);
+  const { fetchAllStoreProducts, storeProducts, fetchUpdateActiveProduct } =
+    useContext(StoreContext);
+
+  const handleToggleProduct = async (productId) => {
+    await fetchUpdateActiveProduct(productId);
+  };
 
   useEffect(() => {
     fetchAllStoreProducts();
@@ -16,7 +20,7 @@ const ManageProduct = () => {
           Manage <span className="text-gray-800">Products</span>
         </h1>
         <div className="w-full rounded-md overflow-hidden">
-          <table className="min-w-full border border-gray-300  border-collapse">
+          <table className="min-w-full border border-gray-300 border-collapse">
             <thead className="bg-gray-100 text-left text-sm text-gray-600 font-medium border-b border-gray-300">
               <tr>
                 <th className="px-4 py-3">Name</th>
@@ -27,28 +31,29 @@ const ManageProduct = () => {
             </thead>
             <tbody className="text-sm text-gray-700 divide-y divide-gray-200">
               {storeProducts.map((product) => (
-                <tr key={product?._id}>
+                <tr key={product._id}>
                   <td className="px-4 py-3 flex items-center gap-3">
                     <img
-                      src={product?.image}
-                      alt={product?.name}
+                      src={product.image}
+                      alt={product.name}
                       className="w-10 h-10 object-cover rounded"
                     />
-                    <span>{product?.name}</span>
+                    <span>{product.name}</span>
                   </td>
                   <td className="px-4 py-3 max-w-[300px] truncate">
-                    {product?.description}
+                    {product.description}
                   </td>
                   <td className="px-4 py-3 font-medium">
-                    ${product?.price.toLocaleString()}
+                    ${product.price.toLocaleString()}
                   </td>
                   <td className="px-4 py-3">
                     <div
-                      className={`w-12 py-1 px-1 rounded-full flex items-center transition-all duration-300 ${
-                        product?.isAvailable
+                      onClick={() => handleToggleProduct(product._id)}
+                      className={`w-12 py-1 px-1 rounded-full flex items-center transition-all duration-300 cursor-pointer ${
+                        product.isAvailable
                           ? "bg-green-600 justify-end"
                           : "bg-gray-300 justify-start"
-                      } cursor-pointer`}
+                      }`}
                     >
                       <div className="h-3.5 w-3.5 bg-white rounded-full"></div>
                     </div>

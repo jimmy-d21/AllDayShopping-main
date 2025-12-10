@@ -37,7 +37,9 @@ const StoreContextProvider = ({ children }) => {
         { withCredentials: true }
       );
       setDashboardData(data);
-    } catch (error) {}
+    } catch (error) {
+      toast.error(error.message);
+    }
   };
 
   const fetchAllStoreProducts = async () => {
@@ -47,7 +49,31 @@ const StoreContextProvider = ({ children }) => {
         { withCredentials: true }
       );
       setStoreProducts(data);
-    } catch (error) {}
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
+  // Toggle product active status
+  const fetchUpdateActiveProduct = async (productId) => {
+    try {
+      const { data } = await axios.put(
+        `${BACKEND_URL}/api/products/update-active-product/${productId}`,
+        {},
+        { withCredentials: true }
+      );
+
+      // Update state correctly
+      setStoreProducts((prevProducts) =>
+        prevProducts.map((product) =>
+          product._id === productId ? data.product : product
+        )
+      );
+
+      toast.success(data.message);
+    } catch (error) {
+      toast.error(error.response?.data?.error || error.message);
+    }
   };
 
   const value = {
@@ -56,6 +82,7 @@ const StoreContextProvider = ({ children }) => {
     dashboardData,
     fetchAllStoreProducts,
     storeProducts,
+    fetchUpdateActiveProduct,
   };
 
   return (
