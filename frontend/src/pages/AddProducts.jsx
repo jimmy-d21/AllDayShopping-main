@@ -1,23 +1,79 @@
 import React, { useState } from "react";
+import { useContext } from "react";
+import ProductContext from "../context/ProductContext";
+import toast from "react-hot-toast";
 
 const AddProducts = () => {
+  const { fetchCreateProduct } = useContext(ProductContext);
+  const [loading, setLoading] = useState(false);
   const [image, setImage] = useState(null);
+  const [productData, setProductData] = useState({
+    name: "",
+    description: "",
+    price: "",
+    category: "",
+    image: null,
+  });
 
+  // Handle text/number input changes
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setProductData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  // Handle product image upload
   const handleProductImage = (e) => {
     const file = e.target.files[0];
     if (!file) return;
 
+    if (!file.type.startsWith("image/")) {
+      alert("Please select an image file.");
+      return;
+    }
+
     const reader = new FileReader();
     reader.onload = () => {
-      const result = reader.result;
-      setImage(result);
+      setImage(reader.result);
+      setProductData((prev) => ({
+        ...prev,
+        image: reader.result,
+      }));
+    };
+
+    reader.onerror = () => {
+      console.error("Error reading file");
+      alert("Error reading file. Please try again.");
     };
 
     reader.readAsDataURL(file);
   };
 
+  // Handle submit
   const handleAddProduct = async () => {
-    alert("Add Product");
+    try {
+      setLoading(true);
+      const data = await fetchCreateProduct(productData);
+      if (!data.error) {
+        toast.success(data.message);
+      } else {
+        toast.error(data.error);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      setLoading(false);
+      setProductData({
+        name: "",
+        description: "",
+        price: "",
+        category: "",
+        image: null,
+      });
+      setImage(null);
+    }
   };
 
   return (
@@ -47,37 +103,61 @@ const AddProducts = () => {
             </label>
           </div>
         </div>
+
         <div className="max-w-md flex flex-col gap-5 mb-10">
           <div className="flex flex-col gap-3">
             <h1 className="text-md font-medium text-gray-500">Name</h1>
             <input
               type="text"
+              name="name"
+              value={productData.name}
+              onChange={handleChange}
               placeholder="Enter product name"
               className="text-md text-gray-500 font-medium py-3 px-4 outline-none rounded-sm border border-gray-300"
             />
           </div>
+
           <div className="flex flex-col gap-3">
             <h1 className="text-md font-medium text-gray-500">Description</h1>
             <textarea
-              type="text"
+              name="description"
+              value={productData.description}
+              onChange={handleChange}
               placeholder="Enter product description"
               className="resize-none min-h-40 text-md text-gray-500 font-medium py-3 px-4 outline-none rounded-sm border border-gray-300"
             />
           </div>
+
           <div className="flex flex-col gap-3">
             <h1 className="text-md font-medium text-gray-500">Price ($)</h1>
             <input
               type="number"
+              name="price"
+              value={productData.price}
+              onChange={handleChange}
               placeholder="0"
               className="text-md text-gray-500 font-medium py-3 px-4 outline-none rounded-sm border border-gray-300"
             />
           </div>
+
+          <div className="flex flex-col gap-3">
+            <h1 className="text-md font-medium text-gray-500">Category</h1>
+            <input
+              type="text"
+              name="category"
+              value={productData.category}
+              onChange={handleChange}
+              placeholder="Enter product category"
+              className="text-md text-gray-500 font-medium py-3 px-4 outline-none rounded-sm border border-gray-300"
+            />
+          </div>
         </div>
+
         <button
           onClick={handleAddProduct}
           className="text-white font-medium text-md bg-gray-800 py-3 px-7 rounded-md transition-all duration-300 hover:bg-gray-900 cursor-pointer"
         >
-          Add Product
+          {loading ? "Adding Product..." : "Add Product"}
         </button>
       </div>
     </div>

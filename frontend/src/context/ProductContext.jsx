@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
 import { createContext } from "react";
+import toast from "react-hot-toast";
 
 const ProductContext = createContext();
 
@@ -58,6 +59,17 @@ export const ProductContextProvider = ({ children }) => {
     }
   };
 
+  const fetchCreateProduct = async (productData) => {
+    try {
+      const { data } = await axios.post(
+        `${BACKEND_URL}/api/products/create-product`,
+        productData,
+        { withCredentials: true }
+      );
+      return data;
+    } catch (error) {}
+  };
+
   const value = {
     latestProducts,
     fetchingLatestProducts,
@@ -66,6 +78,7 @@ export const ProductContextProvider = ({ children }) => {
     allProducts,
     fetchAllProducts,
     fetchProductsDetails,
+    fetchCreateProduct,
   };
 
   return (
