@@ -21,7 +21,11 @@ const BestSellingProduct = () => {
         <h1 className="text-2xl font-semibold ">Best Selling</h1>
         <div className="flex items-center gap-3 text-sm font-medium">
           <span className="text-gray-600">
-            Showing 8 of {bestSellingProducts.length} products{" "}
+            Showing{" "}
+            {bestSellingProducts.length > 8
+              ? `8`
+              : `${bestSellingProducts.length}`}{" "}
+            of {bestSellingProducts.length} products{" "}
           </span>
           <span
             onClick={() => navigate("/shop")}
