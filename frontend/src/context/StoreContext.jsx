@@ -10,6 +10,8 @@ const StoreContextProvider = ({ children }) => {
   const BACKEND_URL = "http://localhost:5000";
   const navigate = useNavigate();
   const [dashboardData, setDashboardData] = useState(null);
+  const [storeProducts, setStoreProducts] = useState([]);
+
   const fetchCreateStore = async (storeData) => {
     try {
       const { data } = await axios.post(
@@ -27,6 +29,7 @@ const StoreContextProvider = ({ children }) => {
       toast.error(error.message);
     }
   };
+
   const fetchDashboardData = async () => {
     try {
       const { data } = await axios.get(
@@ -36,7 +39,24 @@ const StoreContextProvider = ({ children }) => {
       setDashboardData(data);
     } catch (error) {}
   };
-  const value = { fetchCreateStore, fetchDashboardData, dashboardData };
+
+  const fetchAllStoreProducts = async () => {
+    try {
+      const { data } = await axios.get(
+        `${BACKEND_URL}/api/stores/get-all-store-products`,
+        { withCredentials: true }
+      );
+      setStoreProducts(data);
+    } catch (error) {}
+  };
+
+  const value = {
+    fetchCreateStore,
+    fetchDashboardData,
+    dashboardData,
+    fetchAllStoreProducts,
+    storeProducts,
+  };
 
   return (
     <StoreContext.Provider value={value}>{children}</StoreContext.Provider>

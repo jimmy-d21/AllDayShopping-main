@@ -1,15 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { dummyAllStoreProducts } from "../../assets/assets";
+import { useContext } from "react";
+import { StoreContext } from "../../context/StoreContext";
 
 const ManageProduct = () => {
-  const [storeProducts, setStoreProducts] = useState([]);
-
-  const fetchAllStoreOrders = async () => {
-    setStoreProducts(dummyAllStoreProducts);
-  };
+  const { fetchAllStoreProducts, storeProducts } = useContext(StoreContext);
 
   useEffect(() => {
-    fetchAllStoreOrders();
+    fetchAllStoreProducts();
   }, []);
 
   return (
