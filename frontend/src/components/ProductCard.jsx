@@ -18,7 +18,8 @@ const ProductCard = ({ product }) => {
       </div>
       <div className="w-full flex flex-col gap-2 text-sm">
         <div className="flex items-center justify-between text-gray-600 font-medium">
-          <h3>{product?.name}</h3> <span>${product?.price}</span>
+          <h3>{product?.name}</h3>{" "}
+          <span>${product?.price.toLocaleString()}</span>
         </div>
         <img
           className="w-20"
