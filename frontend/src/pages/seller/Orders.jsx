@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { dummyAllStoreOrders } from "../../assets/assets";
 import { formatOrderDate } from "../../utils/formatOrderDate";
+import { useContext } from "react";
+import { StoreContext } from "../../context/StoreContext";
 
 const Orders = () => {
-  const [storeOrders, setStoreOrders] = useState([]);
-
-  const fetchAllStoreOrders = async () => {
-    setStoreOrders(dummyAllStoreOrders);
-  };
+  const { storeOrders, setStoreOrders, fetchAllStoreOrders } =
+    useContext(StoreContext);
 
   useEffect(() => {
     fetchAllStoreOrders();

@@ -65,7 +65,7 @@ const orderSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      default: "order-placed",
+      default: "order_placed",
     },
     paymentMethod: {
       type: String,

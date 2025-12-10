@@ -11,6 +11,7 @@ const StoreContextProvider = ({ children }) => {
   const navigate = useNavigate();
   const [dashboardData, setDashboardData] = useState(null);
   const [storeProducts, setStoreProducts] = useState([]);
+  const [storeOrders, setStoreOrders] = useState([]);
 
   const fetchCreateStore = async (storeData) => {
     try {
@@ -76,6 +77,16 @@ const StoreContextProvider = ({ children }) => {
     }
   };
 
+  const fetchAllStoreOrders = async () => {
+    try {
+      const { data } = await axios.get(
+        `${BACKEND_URL}/api/stores/get-all-store-orders`,
+        { withCredentials: true }
+      );
+      setStoreOrders(data.orders);
+    } catch (error) {}
+  };
+
   const value = {
     fetchCreateStore,
     fetchDashboardData,
@@ -83,6 +94,9 @@ const StoreContextProvider = ({ children }) => {
     fetchAllStoreProducts,
     storeProducts,
     fetchUpdateActiveProduct,
+    storeOrders,
+    setStoreOrders,
+    fetchAllStoreOrders,
   };
 
   return (
