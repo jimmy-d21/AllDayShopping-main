@@ -115,8 +115,7 @@ export const getLatestProducts = async (req, res) => {
   try {
     let latestProducts = await Product.find({ isAvailable: true }).sort({
       createdAt: -1,
-    }); // get the latest product
-    latestProducts = getShuffledProducts(latestProducts); // get the shuffled products list
+    });
 
     res.status(200).json(latestProducts);
   } catch (error) {
