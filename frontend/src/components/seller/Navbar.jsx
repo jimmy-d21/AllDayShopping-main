@@ -1,38 +1,16 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { IoLogOutOutline } from "react-icons/io5";
+import { useContext } from "react";
+import UserContext from "../../context/userContext";
 
 const Navbar = () => {
+  const { authUser, fetchLogoutAccount } = useContext(UserContext);
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
-  const authUser = {
-    _id: "691dfe0889b94592c784d06e",
-    username: "jimmyedelacruz1",
-    email: "jimmyedelacruz1@gmail.com",
-    password: "$2b$10$eatWxzAu45bD9CicfE.Mje2PXgKlZ60pvhIx.gJqwM4iHF/MgBAaS",
-    role: "seller",
-    profilePic:
-      "https://res.cloudinary.com/dljgxwpkk/image/upload/v1763528416/nlsws7ly5vuzigwz4d7y.png",
-    address: [
-      {
-        name: "Jimmy E. dela Cruz",
-        email: "jimmyedelacruz1@gmail.com",
-        street: "Block 12 Lot 5, Phase 2, Verdant Heights Subdivision",
-        city: "Dasmariñas",
-        state: "Cavite",
-        zip: "4114",
-        country: "Philippines",
-        phone: "+63 927 888 4567",
-        _id: "691dfe70687274f65c0a7709",
-      },
-    ],
-    createdAt: "2025-11-19T17:27:36.579Z",
-    updatedAt: "2025-11-19T17:29:20.672Z",
-    __v: 1,
-  };
 
   const handleLogout = async () => {
-    alert("Logout successfully!");
+    await fetchLogoutAccount();
   };
 
   return (
@@ -52,7 +30,7 @@ const Navbar = () => {
           className="overflow-hidden rounded-full h-10 w-10 cursor-pointer"
         >
           <img
-            src={authUser?.profilePic}
+            src={authUser?.profilePic || "/avatar-placeholder.png"}
             alt=""
             className="w-full h-full object-cover"
           />
