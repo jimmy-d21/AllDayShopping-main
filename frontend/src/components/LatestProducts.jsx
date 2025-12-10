@@ -23,7 +23,9 @@ const LatestProducts = () => {
         <h1 className="text-2xl font-semibold ">Latest Products</h1>
         <div className="flex items-center gap-3 text-sm font-medium">
           <span className="text-gray-600">
-            Showing 4 of {latestProducts.length} products{" "}
+            Showing{" "}
+            {latestProducts.length > 4 ? `4` : `${latestProducts.length}`} of{" "}
+            {latestProducts.length} products{" "}
           </span>
           <span
             onClick={() => navigate("/shop")}
