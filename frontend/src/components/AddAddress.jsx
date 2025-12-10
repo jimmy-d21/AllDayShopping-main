@@ -24,10 +24,6 @@ const AddAddress = ({ setOpen, setAddress }) => {
   };
 
   const handleSaveAddress = async () => {
-    // Basic validation
-    const isEmpty = Object.values(newAddress).some((v) => v.trim() === "");
-    if (isEmpty) return alert("Please fill in all fields");
-
     await fetchAddAddress(newAddress);
     setAddress(newAddress);
     setOpen(false);
