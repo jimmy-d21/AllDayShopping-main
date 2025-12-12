@@ -48,7 +48,6 @@ export const AdminContextProvider = ({ children }) => {
 
       setAuthUser(data.user);
       toast.success("Login successful");
-      navigate("/admin/dashboard");
 
       return data;
     } catch (error) {
