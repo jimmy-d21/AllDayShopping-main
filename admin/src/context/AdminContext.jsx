@@ -67,7 +67,6 @@ export const AdminContextProvider = ({ children }) => {
 
       toast.success(data.message);
       setAuthUser(null);
-      navigate("/admin/login");
     } catch (error) {
       toast.error(error.response?.data?.error || "Logout failed");
     }
