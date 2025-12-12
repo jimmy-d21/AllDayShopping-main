@@ -107,6 +107,28 @@ export const AdminContextProvider = ({ children }) => {
     } catch (error) {}
   };
 
+  const fetchUpdateActiveStore = async (storeId) => {
+    try {
+      const { data } = await axios.put(
+        `${BACKEND_URL}/api/admin/update-active-store/${storeId}`,
+        {},
+        { withCredentials: true }
+      );
+
+      const updatedStore = data.store;
+
+      // update UI
+      setAllStores((prev) =>
+        prev.map((store) => (store._id === storeId ? updatedStore : store))
+      );
+
+      toast.success("Store status updated");
+      return data;
+    } catch (error) {
+      toast.error(error.response?.data?.error || "Failed to update store");
+    }
+  };
+
   const value = {
     currency,
     dashboardData,
@@ -120,6 +142,8 @@ export const AdminContextProvider = ({ children }) => {
     fecthAllStores,
     allPendingStores,
     fecthAllPendingStores,
+    fetchUpdateActiveStore,
+    setAllStores,
   };
 
   return (
