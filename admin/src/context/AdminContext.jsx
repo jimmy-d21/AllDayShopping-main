@@ -11,6 +11,7 @@ export const AdminContextProvider = ({ children }) => {
   const navigate = useNavigate();
 
   const [dashboardData, setDashboardData] = useState(null);
+  const [allStores, setAllStores] = useState([]);
   const [authUser, setAuthUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -85,6 +86,16 @@ export const AdminContextProvider = ({ children }) => {
     }
   };
 
+  const fecthAllStores = async () => {
+    try {
+      const { data } = await axios.get(
+        `${BACKEND_URL}/api/admin/get-all-store`,
+        { withCredentials: true }
+      );
+      setAllStores(data);
+    } catch (error) {}
+  };
+
   const value = {
     currency,
     dashboardData,
@@ -94,6 +105,8 @@ export const AdminContextProvider = ({ children }) => {
     fetchLogoutAccount,
     loading,
     navigate,
+    allStores,
+    fecthAllStores,
   };
 
   return (

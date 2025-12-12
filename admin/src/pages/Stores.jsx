@@ -1,17 +1,10 @@
 import React from "react";
-import { useState } from "react";
-import { dummyAllStores } from "../assets/assets";
 import { useEffect } from "react";
 import StoreCard from "../components/StoreCard";
+import { useAdminContext } from "../context/AdminContext";
 
 const Stores = () => {
-  const [allStores, setAllStores] = useState([]);
-
-  const fecthAllStores = async () => {
-    try {
-      setAllStores(dummyAllStores);
-    } catch (error) {}
-  };
+  const { allStores, fecthAllStores } = useAdminContext();
 
   useEffect(() => {
     fecthAllStores();
