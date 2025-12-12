@@ -7,6 +7,7 @@ const OrderContext = createContext();
 
 export const OrderContextProvider = ({ children }) => {
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+  const currency = import.meta.env.VITE_CURRENCY;
   const [allOrders, setAllOrders] = useState([]);
 
   const fetchAllOrders = async () => {
@@ -57,6 +58,7 @@ export const OrderContextProvider = ({ children }) => {
         fetchAddOrder,
         fetchUpdateStatusOrder,
         setAllOrders,
+        currency,
       }}
     >
       {children}
