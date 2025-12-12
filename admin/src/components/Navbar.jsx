@@ -17,7 +17,7 @@ const Navbar = () => {
         </div>
         {open && (
           <div className="absolute top-10 right-0 bg-gray-300 border-gray-300 rounded-md py-2 px-5 shadow cursor-pointer">
-            <span>Logout</span>
+            <span className="text-gray-800 font-semibold">Logout</span>
           </div>
         )}
       </div>
