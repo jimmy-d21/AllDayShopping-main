@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useContext } from "react";
 import { assets } from "../assets/assets";
 import { FaArrowRightLong } from "react-icons/fa6";
+import ProductContext from "../context/ProductContext";
 
 const Hero = () => {
+  const { currency } = useContext(ProductContext);
   return (
     <div className="w-full flex gap-8">
       {/* Right */}
@@ -13,7 +15,7 @@ const Hero = () => {
               News
             </span>
             <p className="text-sm text-green-600 font-medium">
-              Free Shipping on Orders Above $50!
+              Free Shipping on Orders Above {currency}50!
             </p>
           </div>
           <h1 class="text-transparent w-120 bg-clip-text bg-gradient-to-r from-green-700 via-green-500 to-green-300 font-medium text-5xl mt-4">
@@ -21,7 +23,9 @@ const Hero = () => {
           </h1>
           <div className="flex flex-col mt-8">
             <p className="text-gray-800 font-dedium text-sm">Start from</p>
-            <span className="text-gray-800 font-semibold text-3xl">$4.90</span>
+            <span className="text-gray-800 font-semibold text-3xl">
+              {currency}399
+            </span>
           </div>
           <button className="bg-gray-800 text-white py-5 px-10 max-w-50 mt-8 rounded-md cursor-pointer transition-all duration-300 hover:scale-105">
             LEARN MORE
