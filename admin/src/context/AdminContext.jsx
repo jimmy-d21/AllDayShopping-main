@@ -12,6 +12,7 @@ export const AdminContextProvider = ({ children }) => {
 
   const [dashboardData, setDashboardData] = useState(null);
   const [allStores, setAllStores] = useState([]);
+  const [allPendingStores, setAllPendingStores] = useState([]);
   const [authUser, setAuthUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -96,6 +97,16 @@ export const AdminContextProvider = ({ children }) => {
     } catch (error) {}
   };
 
+  const fecthAllPendingStores = async () => {
+    try {
+      const { data } = await axios.get(
+        `${BACKEND_URL}/api/admin/pending-stores`,
+        { withCredentials: true }
+      );
+      setAllPendingStores(data);
+    } catch (error) {}
+  };
+
   const value = {
     currency,
     dashboardData,
@@ -107,6 +118,8 @@ export const AdminContextProvider = ({ children }) => {
     navigate,
     allStores,
     fecthAllStores,
+    allPendingStores,
+    fecthAllPendingStores,
   };
 
   return (

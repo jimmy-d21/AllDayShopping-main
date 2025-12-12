@@ -1,20 +1,13 @@
 import React from "react";
 import { useEffect } from "react";
-import { useState } from "react";
-import { dummyAllPendingStores } from "../assets/assets";
 import PendStoreCard from "../components/PendStoreCard";
+import { useAdminContext } from "../context/AdminContext";
 
 const Approve = () => {
-  const [allPendingStores, setAllPendingStores] = useState([]);
-
-  const fecthAllStores = async () => {
-    try {
-      setAllPendingStores(dummyAllPendingStores);
-    } catch (error) {}
-  };
+  const { allPendingStores, fecthAllPendingStores } = useAdminContext();
 
   useEffect(() => {
-    fecthAllStores();
+    fecthAllPendingStores();
   }, []);
 
   return (
