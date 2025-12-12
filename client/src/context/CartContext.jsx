@@ -6,6 +6,7 @@ const CartContext = createContext();
 
 export const CartContextProvider = ({ children }) => {
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+  const currency = import.meta.env.VITE_CURRENCY;
 
   const [allCarts, setAllCarts] = useState([]);
   const [cartTotals, setCartTotals] = useState({
@@ -95,6 +96,7 @@ export const CartContextProvider = ({ children }) => {
         cartTotals,
         fetchCartTotals,
         setAllCarts,
+        currency,
       }}
     >
       {children}
