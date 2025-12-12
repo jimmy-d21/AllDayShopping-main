@@ -3,44 +3,40 @@ import Product from "../models/product.model.js";
 import Store from "../models/store.model.js";
 import User from "../models/user.model.js";
 
-export const adminUpprove = async (req, res) => {
+export const adminApprove = async (req, res) => {
   try {
     const { storeId } = req.params;
     const adminId = req.userId;
 
     const store = await Store.findById(storeId);
-    if (!store) {
-      return res.status(400).json({ error: "Store not found" });
-    }
+    if (!store) return res.status(404).json({ error: "Store not found" });
 
     const ownerStoreUser = await User.findById(store.owner);
-    if (!ownerStoreUser) {
-      return res.status(400).json({ error: "Owner Store User not found" });
-    }
+    if (!ownerStoreUser)
+      return res.status(404).json({ error: "Owner user not found" });
 
     const adminUser = await User.findById(adminId);
-    if (!adminUser) {
-      return res.status(400).json({ error: "Store not found" });
+    if (!adminUser || adminUser.role !== "admin") {
+      return res
+        .status(403)
+        .json({ error: "Unauthorized: only admin can approve stores." });
     }
 
-    if (adminUser.role !== "admin") {
-      return res.status(400).json({
-        error: "UnAuthorized to cofirm the request only Admin can cofirm this.",
-      });
-    }
+    // Approve the store
     store.requestStatus = "approve";
-    ownerStoreUser.role = "seller";
     store.isActive = true;
+    ownerStoreUser.role = "seller";
 
-    await ownerStoreUser.save();
     await store.save();
+    await ownerStoreUser.save();
 
-    res.status(200).json({ ownerStoreUser, store });
+    res.status(200).json({
+      message: "Store approved successfully",
+      store: store, // Updated store
+    });
   } catch (error) {
-    console.error("Update Request Store Error:", error.message);
-    return res
-      .status(500)
-      .json({ error: "Something went wrong. Please try again." });
+    console.error("Approve Store Error:", error.message);
+    res.status(500).json({ error: "Something went wrong." });
   }
 };
 

@@ -132,6 +132,31 @@ export const AdminContextProvider = ({ children }) => {
     }
   };
 
+  const fetchApproveStore = async (storeId) => {
+    try {
+      const { data } = await axios.put(
+        `${BACKEND_URL}/api/admin/approve-store/${storeId}`,
+        {},
+        { withCredentials: true }
+      );
+
+      // Remove approved store from pending stores
+      setAllPendingStores((prev) =>
+        prev.filter((store) => store._id !== storeId)
+      );
+
+      await fecthAllStores();
+
+      if (!data.error) {
+        toast.success(data.message);
+      } else {
+        toast.error(data.error);
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.error || "Failed to approve store");
+    }
+  };
+
   const value = {
     currency,
     dashboardData,
@@ -147,6 +172,7 @@ export const AdminContextProvider = ({ children }) => {
     fecthAllPendingStores,
     fetchUpdateActiveStore,
     setAllStores,
+    fetchApproveStore,
   };
 
   return (

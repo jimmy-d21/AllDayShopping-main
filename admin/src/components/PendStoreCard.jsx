@@ -3,8 +3,10 @@ import { HiOutlineLocationMarker } from "react-icons/hi";
 import { IoCallOutline } from "react-icons/io5";
 import { MdOutlineMail } from "react-icons/md";
 import { formatDateShort } from "../utils/formatDateShort";
+import { useAdminContext } from "../context/AdminContext";
 
 const PendStoreCard = ({ store }) => {
+  const { fetchApproveStore } = useAdminContext();
   return (
     <div className="w-full border-gray-300 border rounded-md p-5 shadow flex flex-col text-left gap-3">
       <div className="flex items-center justify-center w-20 h-20 rounded-full overflow-hidden">
@@ -53,7 +55,10 @@ const PendStoreCard = ({ store }) => {
             <h3 className="text-gray-800 font-semibold">{store?.name}</h3>
           </div>
           <div className="flex items-center gap-4">
-            <button className="py-2 px-5 text-white text-sm bg-green-600 rounded-sm cursor-pointer transition-all duration-300 hover:bg-green-700">
+            <button
+              onClick={() => fetchApproveStore(store._id)}
+              className="py-2 px-5 text-white text-sm bg-green-600 rounded-sm cursor-pointer transition-all duration-300 hover:bg-green-700"
+            >
               Approve
             </button>
             <button className="py-2 px-5 text-white text-sm bg-gray-600 rounded-sm cursor-pointer transition-all duration-300 hover:bg-gray-700">
