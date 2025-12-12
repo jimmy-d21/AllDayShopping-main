@@ -152,11 +152,6 @@ export const rejectStore = async (req, res) => {
       return res.status(404).json({ error: "Store not found" });
     }
 
-    const isPending = store.requestStatus === "pending";
-    if (!isPending) {
-      return res.status(404).json({ error: "You cant delete this store" });
-    }
-
     await Store.findByIdAndDelete(storeId);
 
     res.status(200).json({ message: "Reject Store Successfully" });
