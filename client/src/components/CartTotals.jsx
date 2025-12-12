@@ -2,6 +2,8 @@
 import React, { useContext, useEffect } from "react";
 import { LuPlus } from "react-icons/lu";
 import { FaEdit } from "react-icons/fa";
+import { BsCashCoin } from "react-icons/bs";
+import { FaCreditCard } from "react-icons/fa6";
 import CartContext from "../context/CartContext";
 import UserContext from "../context/userContext";
 import OrderContext from "../context/OrderContext";
@@ -15,7 +17,7 @@ const CartTotals = ({
   setPaymentMethod,
   setOpen,
 }) => {
-  const { cartTotals, fetchCartTotals, fetchAllCarts } =
+  const { cartTotals, fetchCartTotals, fetchAllCarts, currency } =
     useContext(CartContext);
   const { authUser } = useContext(UserContext);
   const { fetchAddOrder } = useContext(OrderContext);
@@ -23,14 +25,13 @@ const CartTotals = ({
 
   const handlePlaceOrder = async () => {
     if (!address?.name) {
-      toast.error("Please select or add an address.");
+      toast.error("Please select an address.");
       return;
     }
 
     try {
       await fetchAddOrder(paymentMethod, address);
       toast.success("Order placed successfully!");
-
       await fetchAllCarts();
       navigate("/order");
     } catch {
@@ -43,59 +44,77 @@ const CartTotals = ({
   }, []);
 
   return (
-    <div className="max-w-80 w-full border border-gray-300 rounded-xl p-6 flex flex-col overflow-hidden">
-      <h3 className="text-xl text-gray-800 font-medium">Payment Summary</h3>
+    <div className="w-full bg-white rounded-lg border border-gray-200 p-5">
+      <h3 className="text-lg font-semibold text-gray-800 mb-4">
+        Order Summary
+      </h3>
 
-      {/* PAYMENT METHOD */}
-      <div className="flex flex-col py-5 border-b border-gray-300">
-        <p className="text-xs mb-5 text-gray-400">Payment Method</p>
-
-        <div className="text-gray-500 flex items-center gap-2">
-          <input
-            type="radio"
-            name="paymentMethod"
-            value="COD"
-            checked={paymentMethod === "COD"}
-            onChange={(e) => setPaymentMethod(e.target.value)}
-          />
-          <span
-            onClick={() => setPaymentMethod("COD")}
-            className="cursor-pointer"
-          >
-            COD
+      {/* Totals */}
+      <div className="space-y-2 mb-6">
+        <div className="flex justify-between">
+          <span className="text-gray-600">Subtotal:</span>
+          <span className="font-medium">
+            {currency}
+            {cartTotals?.subtotal?.toLocaleString(undefined, {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })}
           </span>
         </div>
-
-        <div className="text-gray-500 flex items-center gap-2">
-          <input
-            type="radio"
-            name="paymentMethod"
-            value="STRIPE"
-            checked={paymentMethod === "STRIPE"}
-            onChange={(e) => setPaymentMethod(e.target.value)}
-          />
-          <span
-            onClick={() => setPaymentMethod("STRIPE")}
-            className="cursor-pointer"
-          >
-            Stripe Payment
+        <div className="flex justify-between">
+          <span className="text-gray-600">Shipping:</span>
+          <span className="font-medium">
+            {currency}
+            {cartTotals?.shippingFee?.toFixed(2)}
+          </span>
+        </div>
+        <div className="flex justify-between pt-3 border-t">
+          <span className="font-semibold text-gray-800">Total:</span>
+          <span className="text-lg font-bold text-blue-600">
+            {currency}
+            {cartTotals?.total?.toLocaleString(undefined, {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })}
           </span>
         </div>
       </div>
 
-      {/* ADDRESS */}
-      <div className="flex flex-col gap-2 py-5 border-b border-gray-300">
-        <p className="text-gray-400 text-sm">Address</p>
+      {/* Payment Method */}
+      <div className="mb-5">
+        <p className="text-sm font-medium text-gray-700 mb-2">Payment Method</p>
+        <div className="flex gap-3">
+          <button
+            onClick={() => setPaymentMethod("COD")}
+            className={`flex items-center gap-2 px-3 py-2 rounded-lg border ${
+              paymentMethod === "COD"
+                ? "border-blue-500 bg-blue-50 text-blue-700"
+                : "border-gray-300 hover:border-gray-400"
+            }`}
+          >
+            <BsCashCoin className="w-4 h-4" />
+            <span className="text-sm">COD</span>
+          </button>
+          <button
+            onClick={() => setPaymentMethod("STRIPE")}
+            className={`flex items-center gap-2 px-3 py-2 rounded-lg border ${
+              paymentMethod === "STRIPE"
+                ? "border-blue-500 bg-blue-50 text-blue-700"
+                : "border-gray-300 hover:border-gray-400"
+            }`}
+          >
+            <FaCreditCard className="w-4 h-4" />
+            <span className="text-sm">Stripe</span>
+          </button>
+        </div>
+      </div>
 
-        {address.name ? (
-          <div className="w-full flex items-center gap-10 text-xs text-gray-400">
-            <div className="flex flex-col gap-1">
-              {Object.values(address).map((v, i) => (
-                <span key={i}>{v}</span>
-              ))}
-            </div>
-            <FaEdit
-              className="w-4 h-4 cursor-pointer"
+      {/* Address */}
+      <div className="mb-6">
+        <div className="flex items-center justify-between mb-2">
+          <p className="text-sm font-medium text-gray-700">Shipping Address</p>
+          {address.name && (
+            <button
               onClick={() =>
                 setAddress({
                   name: "",
@@ -108,56 +127,56 @@ const CartTotals = ({
                   phone: "",
                 })
               }
-            />
+              className="text-xs text-blue-600 hover:text-blue-700"
+            >
+              Clear
+            </button>
+          )}
+        </div>
+
+        {address.name ? (
+          <div className="bg-gray-50 p-3 rounded-lg border border-gray-200 text-sm">
+            <p className="font-medium text-gray-800">{address.name}</p>
+            <p className="text-gray-600 truncate">{address.email}</p>
+            <p className="text-gray-600">
+              {address.street}, {address.city}
+            </p>
           </div>
         ) : (
-          <select
-            className="border border-gray-400 text-xs px-2 py-2 rounded-sm"
-            onChange={(e) => setAddress(JSON.parse(e.target.value))}
-          >
-            <option value="">Select Address</option>
-            {authUser.address.map((addr, i) => (
-              <option key={i} value={JSON.stringify(addr)}>
-                {addr.name}, {addr.email}
-              </option>
-            ))}
-          </select>
+          <div className="space-y-2">
+            <select
+              className="w-full p-2 text-sm border border-gray-300 rounded-lg"
+              onChange={(e) => setAddress(JSON.parse(e.target.value))}
+            >
+              <option value="">Select address</option>
+              {authUser?.address?.map((addr, i) => (
+                <option key={i} value={JSON.stringify(addr)}>
+                  {addr.name}, {addr.city}
+                </option>
+              ))}
+            </select>
+            <button
+              onClick={() => setOpen(true)}
+              className="flex items-center gap-2 text-sm text-blue-600 hover:text-blue-700"
+            >
+              <LuPlus className="w-4 h-4" />
+              Add new address
+            </button>
+          </div>
         )}
-
-        <div
-          onClick={() => setOpen(true)}
-          className="flex items-center text-gray-600 gap-2 text-xs cursor-pointer"
-        >
-          <span>Add Address</span>
-          <LuPlus className="w-5 h-5" />
-        </div>
       </div>
 
-      {/* TOTALS */}
-      <div className="flex flex-col gap-2 py-5 border-b border-gray-300">
-        <div className="flex justify-between">
-          <span className="text-gray-400 text-sm">Subtotal:</span>
-          <span>${cartTotals?.subtotal.toLocaleString()}</span>
-        </div>
-        <div className="flex justify-between">
-          <span className="text-gray-400 text-sm">Shipping:</span>
-          <span>${cartTotals?.shippingFee}</span>
-        </div>
-      </div>
-
-      {/* Total */}
-      <div className="flex justify-between py-5">
-        <span className="text-gray-600 text-sm">Total:</span>
-        <span className="text-gray-600 text-sm">
-          ${cartTotals?.total.toLocaleString()}
-        </span>
-      </div>
-
+      {/* Place Order Button */}
       <button
         onClick={handlePlaceOrder}
-        className="text-white text-sm py-3 rounded-md bg-gray-700 hover:bg-gray-800"
+        disabled={!address?.name}
+        className={`w-full py-3 rounded-lg font-medium ${
+          address?.name
+            ? "bg-blue-600 hover:bg-blue-700 text-white"
+            : "bg-gray-200 text-gray-500 cursor-not-allowed"
+        }`}
       >
-        Place Order
+        {address?.name ? "Place Order" : "Select Address"}
       </button>
     </div>
   );
