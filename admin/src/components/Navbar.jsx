@@ -7,7 +7,7 @@ const Navbar = () => {
   return (
     <div className="flex items-center justify-between py-5 px-10 border-b border-gray-300">
       <div
-        onClick={() => navigate("/admin")}
+        onClick={() => navigate("/")}
         className="text-green-600 font-semibold text-3xl cursor-pointer"
       >
         All Day <span className="text-gray-700">Shop</span>
