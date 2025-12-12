@@ -1,3 +1,5 @@
+import generateTokenAndSetCookiesAdmin from "../lib/generateTokenAndSetCookiesAdmin.js";
+import bcrypt from "bcryptjs";
 import Order from "../models/order.model.js";
 import Product from "../models/product.model.js";
 import Store from "../models/store.model.js";
@@ -170,5 +172,65 @@ export const getAllStores = async (req, res) => {
     return res
       .status(500)
       .json({ error: "Something went wrong. Please try again." });
+  }
+};
+
+export const loginAdmin = async (req, res) => {
+  try {
+    const { username, password } = req.body;
+
+    if (!username || !password) {
+      return res.status(400).json({ error: "Please fill out the form" });
+    }
+
+    const user = await User.findOne({ username });
+    if (!user) {
+      return res.status(400).json({ error: "Invalid username and password" });
+    }
+
+    const isAdmin = user.role === "admin";
+
+    if (!isAdmin) {
+      return res.status(400).json({ error: "Invalid username and password" });
+    }
+
+    const isPasswordCorrect = await bcrypt.compare(password, user.password);
+    if (!isPasswordCorrect) {
+      return res.status(400).json({ error: "Invalid username and password" });
+    }
+
+    if (user) {
+      generateTokenAndSetCookiesAdmin(user._id, res);
+      res.status(200).json({ user, message: "Login Successfully" });
+    } else {
+      res
+        .status(400)
+        .json({ error: "Failed to Login Account! Please login again." });
+    }
+  } catch (error) {
+    console.error("Login Error:", error.message);
+  }
+};
+
+export const getAdminUser = async (req, res) => {
+  try {
+    const adminId = req.userId;
+    const user = await User.findById(adminId).select("-password");
+    if (!user) {
+      return res.status(400).json({ error: "Invalid username and password" });
+    }
+    res.status(200).json({ user });
+  } catch (error) {
+    console.error("Get AuthUser Error:", error.message);
+  }
+};
+
+export const logoutAdmin = async (req, res) => {
+  try {
+    res.cookie("jwt_admin", "", { maxAge: 0 });
+    console.log("Logout Successfully");
+    res.status(200).json({ message: "Logout Successfully" });
+  } catch (error) {
+    console.error("Logout Error:", error.message);
   }
 };

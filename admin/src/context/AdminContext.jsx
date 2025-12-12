@@ -10,20 +10,20 @@ export const AdminContextProvider = ({ children }) => {
   const currency = import.meta.env.VITE_CURRENCY;
   const navigate = useNavigate();
 
+  const [authUser, setAuthUser] = useState(null);
   const [dashboardData, setDashboardData] = useState(null);
   const [allStores, setAllStores] = useState([]);
   const [allPendingStores, setAllPendingStores] = useState([]);
-  const [authUser, setAuthUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
   // Fetch logged in admin
   useEffect(() => {
-    fetchAuthUser();
+    fetchAdmin();
   }, []);
 
-  const fetchAuthUser = async () => {
+  const fetchAdmin = async () => {
     try {
-      const { data } = await axios.get(`${BACKEND_URL}/api/user/authUser`, {
+      const { data } = await axios.get(`${BACKEND_URL}/api/admin/adminUser`, {
         withCredentials: true,
       });
       setAuthUser(data.user);
@@ -34,47 +34,38 @@ export const AdminContextProvider = ({ children }) => {
     }
   };
 
-  // LOGIN API ONLY
+  // Admin login
   const fetchLoginAccount = async (inputs) => {
     try {
       const { data } = await axios.post(
-        `${BACKEND_URL}/api/user/login`,
+        `${BACKEND_URL}/api/admin/admin-login`,
         inputs,
         { withCredentials: true }
       );
-
-      if (data.error) {
-        toast.error(data.error);
-        return null;
-      }
-
+      if (data.error) return toast.error(data.error);
       setAuthUser(data.user);
       toast.success("Login successful");
-
-      return data;
     } catch (error) {
       toast.error(error.response?.data?.error || "Login failed");
-      return null;
     }
   };
 
-  // LOGOUT
+  // Admin logout
   const fetchLogoutAccount = async () => {
     try {
-      const { data } = await axios.post(
-        `${BACKEND_URL}/api/user/logout`,
+      await axios.post(
+        `${BACKEND_URL}/api/admin/admin-logout`,
         {},
         { withCredentials: true }
       );
-
-      toast.success(data.message);
       setAuthUser(null);
+      toast.success("Logged out");
     } catch (error) {
       toast.error(error.response?.data?.error || "Logout failed");
     }
   };
 
-  // DASHBOARD DATA
+  // Dashboard
   const fetchDashBoardData = async () => {
     try {
       const { data } = await axios.get(
@@ -82,11 +73,12 @@ export const AdminContextProvider = ({ children }) => {
         { withCredentials: true }
       );
       setDashboardData(data);
-    } catch (error) {
-      toast.error("Failed to load dashboard.");
+    } catch {
+      toast.error("Failed to load dashboard");
     }
   };
 
+  // Stores
   const fecthAllStores = async () => {
     try {
       const { data } = await axios.get(
@@ -94,7 +86,7 @@ export const AdminContextProvider = ({ children }) => {
         { withCredentials: true }
       );
       setAllStores(data);
-    } catch (error) {}
+    } catch {}
   };
 
   const fecthAllPendingStores = async () => {
@@ -104,7 +96,7 @@ export const AdminContextProvider = ({ children }) => {
         { withCredentials: true }
       );
       setAllPendingStores(data);
-    } catch (error) {}
+    } catch {}
   };
 
   const fetchUpdateActiveStore = async (storeId) => {
@@ -114,19 +106,10 @@ export const AdminContextProvider = ({ children }) => {
         {},
         { withCredentials: true }
       );
-
-      const updatedStore = data.store;
-
-      // update UI
       setAllStores((prev) =>
-        prev.map((store) => (store._id === storeId ? updatedStore : store))
+        prev.map((store) => (store._id === storeId ? data.store : store))
       );
-      if (!data.error) {
-        toast.success("Store status updated");
-      } else {
-        toast.error(data.error);
-      }
-      return data;
+      toast.success("Store status updated");
     } catch (error) {
       toast.error(error.response?.data?.error || "Failed to update store");
     }
@@ -139,40 +122,32 @@ export const AdminContextProvider = ({ children }) => {
         {},
         { withCredentials: true }
       );
-
-      // Remove approved store from pending stores
       setAllPendingStores((prev) =>
         prev.filter((store) => store._id !== storeId)
       );
-
       await fecthAllStores();
-
-      if (!data.error) {
-        toast.success(data.message);
-      } else {
-        toast.error(data.error);
-      }
+      toast.success("Store approved successfully");
     } catch (error) {
       toast.error(error.response?.data?.error || "Failed to approve store");
     }
   };
 
   const value = {
-    currency,
-    dashboardData,
-    fetchDashBoardData,
     authUser,
+    dashboardData,
+    allStores,
+    allPendingStores,
+    loading,
+    currency,
+    navigate,
     fetchLoginAccount,
     fetchLogoutAccount,
-    loading,
-    navigate,
-    allStores,
+    fetchDashBoardData,
     fecthAllStores,
-    allPendingStores,
     fecthAllPendingStores,
     fetchUpdateActiveStore,
-    setAllStores,
     fetchApproveStore,
+    setAllStores,
   };
 
   return (
@@ -181,5 +156,4 @@ export const AdminContextProvider = ({ children }) => {
 };
 
 export const useAdminContext = () => useContext(AdminContext);
-
 export default AdminContextProvider;

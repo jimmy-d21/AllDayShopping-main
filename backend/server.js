@@ -15,7 +15,7 @@ import orderRoutes from "./routes/order.route.js";
 
 dotenv.config();
 
-// CLOUDINARY
+// Cloudinary
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
@@ -24,7 +24,7 @@ cloudinary.config({
 
 const app = express();
 
-// CORS (Required for cookies)
+// CORS with credentials
 app.use(
   cors({
     origin: ["http://localhost:3000", "http://localhost:5173"],
@@ -32,15 +32,10 @@ app.use(
   })
 );
 
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Credentials", "true");
-  next();
-});
-
 app.use(express.json({ limit: "5mb" }));
 app.use(cookieParser());
 
-// ROUTES
+// Routes
 app.use("/api/user", userRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/products", productRoutes);

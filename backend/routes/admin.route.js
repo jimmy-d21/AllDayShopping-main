@@ -1,21 +1,30 @@
 import express from "express";
-import authUser from "../middlewares/authUser.js";
+import adminUser from "../middlewares/adminUser.js";
 import {
   adminApprove,
   getAdminDashboard,
+  getAdminUser,
   getAllPendingStore,
   getAllStores,
+  loginAdmin,
+  logoutAdmin,
   rejectStore,
   updateActiveStore,
 } from "../controllers/admin.controller.js";
 
 const adminRoutes = express.Router();
 
-adminRoutes.get("/admin-dashboard", authUser, getAdminDashboard);
-adminRoutes.get("/get-all-store", authUser, getAllStores);
-adminRoutes.put("/update-active-store/:storeId", authUser, updateActiveStore);
-adminRoutes.get("/pending-stores", authUser, getAllPendingStore);
-adminRoutes.put("/approve-store/:storeId", authUser, adminApprove);
-adminRoutes.delete("/reject-store/:storeId", authUser, rejectStore);
+// Admin authentication routes
+adminRoutes.post("/admin-login", loginAdmin);
+adminRoutes.post("/admin-logout", logoutAdmin);
+adminRoutes.get("/adminUser", adminUser, getAdminUser);
+
+// Dashboard & store management
+adminRoutes.get("/admin-dashboard", adminUser, getAdminDashboard);
+adminRoutes.get("/get-all-store", adminUser, getAllStores);
+adminRoutes.put("/update-active-store/:storeId", adminUser, updateActiveStore);
+adminRoutes.get("/pending-stores", adminUser, getAllPendingStore);
+adminRoutes.put("/approve-store/:storeId", adminUser, adminApprove);
+adminRoutes.delete("/reject-store/:storeId", adminUser, rejectStore);
 
 export default adminRoutes;

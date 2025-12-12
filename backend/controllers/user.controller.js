@@ -67,6 +67,12 @@ export const login = async (req, res) => {
       return res.status(400).json({ error: "Invalid username and password" });
     }
 
+    const isAdmin = user.role === "admin";
+
+    if (isAdmin) {
+      return res.status(400).json({ error: "Invalid username and password" });
+    }
+
     const isPasswordCorrect = await bcrypt.compare(password, user.password);
     if (!isPasswordCorrect) {
       return res.status(400).json({ error: "Invalid username and password" });
