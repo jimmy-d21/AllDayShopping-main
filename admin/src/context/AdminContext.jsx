@@ -121,8 +121,11 @@ export const AdminContextProvider = ({ children }) => {
       setAllStores((prev) =>
         prev.map((store) => (store._id === storeId ? updatedStore : store))
       );
-
-      toast.success("Store status updated");
+      if (!data.error) {
+        toast.success("Store status updated");
+      } else {
+        toast.error(data.error);
+      }
       return data;
     } catch (error) {
       toast.error(error.response?.data?.error || "Failed to update store");

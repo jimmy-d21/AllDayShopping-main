@@ -4,13 +4,10 @@ import { IoCallOutline } from "react-icons/io5";
 import { MdOutlineMail } from "react-icons/md";
 import { formatDateShort } from "../utils/formatDateShort";
 import { useAdminContext } from "../context/AdminContext";
+import { toast } from "react-hot-toast";
 
 const StoreCard = ({ store }) => {
   const { fetchUpdateActiveStore } = useAdminContext();
-
-  const handleUpdateActiveStore = async () => {
-    const data = await fetchUpdateActiveStore(store?._id);
-  };
   return (
     <div className="w-full border-gray-300 border rounded-md p-5 shadow flex flex-col text-left gap-3">
       <div className="flex items-center justify-center w-20 h-20 rounded-full overflow-hidden">
@@ -67,7 +64,7 @@ const StoreCard = ({ store }) => {
               {store?.isActive ? "Active" : "InActive"}
             </span>
             <div
-              onClick={handleUpdateActiveStore}
+              onClick={() => fetchUpdateActiveStore(store?._id)}
               className={`w-12 py-1 px-1 rounded-full flex items-center transition-all duration-300 cursor-pointer ${
                 store.isActive
                   ? "bg-green-600 justify-end"
