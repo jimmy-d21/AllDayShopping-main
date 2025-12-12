@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useState } from "react";
 import { allDummyStores, dummyStore } from "../assets/assets";
 import { useEffect } from "react";
@@ -6,20 +6,19 @@ import { IoLocationOutline } from "react-icons/io5";
 import { MdOutlineEmail } from "react-icons/md";
 import ProductCard from "../components/ProductCard";
 import { useParams } from "react-router-dom";
+import { StoreContext } from "../context/StoreContext";
 
 const StorePage = () => {
   const { name } = useParams();
-  const [storeData, setStoreDate] = useState(null);
+  const { fetchViewStore, storeData } = useContext(StoreContext);
 
-  const fetchStore = async () => {
-    setStoreDate(dummyStore);
+  const fetchStoreData = async () => {
+    await fetchViewStore(name);
   };
 
   useEffect(() => {
-    fetchStore();
-  }, []);
-
-  console.log(storeData);
+    fetchStoreData();
+  }, [name]);
 
   return (
     <div className="min-h-screen max-w-[1300px] mx-auto">

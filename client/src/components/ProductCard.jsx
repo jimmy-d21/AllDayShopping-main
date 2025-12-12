@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useContext } from "react";
 import { calculateRatings } from "../utils/calculateRatings";
 import { useNavigate } from "react-router-dom";
+import ProductContext from "../context/ProductContext";
 
 const ProductCard = ({ product }) => {
+  const { currency } = useContext(ProductContext);
   const navigate = useNavigate();
   return (
     <div
@@ -19,7 +21,10 @@ const ProductCard = ({ product }) => {
       <div className="w-full flex flex-col gap-2 text-sm">
         <div className="flex items-center justify-between text-gray-600 font-medium">
           <h3>{product?.name}</h3>{" "}
-          <span>${product?.price.toLocaleString()}</span>
+          <span>
+            {currency}
+            {product?.price.toLocaleString()}
+          </span>
         </div>
         <img
           className="w-20"

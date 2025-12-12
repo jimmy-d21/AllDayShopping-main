@@ -1,8 +1,8 @@
-import { createContext } from "react";
+// context/StoreContext.jsx
+import { createContext, useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
 
 export const StoreContext = createContext();
 
@@ -10,9 +10,11 @@ const StoreContextProvider = ({ children }) => {
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
   const currency = import.meta.env.VITE_CURRENCY;
   const navigate = useNavigate();
+
   const [dashboardData, setDashboardData] = useState(null);
   const [storeProducts, setStoreProducts] = useState([]);
   const [storeOrders, setStoreOrders] = useState([]);
+  const [storeData, setStoreData] = useState(null);
 
   const fetchCreateStore = async (storeData) => {
     try {
@@ -21,11 +23,12 @@ const StoreContextProvider = ({ children }) => {
         storeData,
         { withCredentials: true }
       );
+
       if (!data.error) {
         toast.success(data.message);
         navigate("/");
       } else {
-        toast.success(data.error);
+        toast.error(data.error);
       }
     } catch (error) {
       toast.error(error.message);
@@ -56,7 +59,6 @@ const StoreContextProvider = ({ children }) => {
     }
   };
 
-  // Toggle product active status
   const fetchUpdateActiveProduct = async (productId) => {
     try {
       const { data } = await axios.put(
@@ -65,11 +67,8 @@ const StoreContextProvider = ({ children }) => {
         { withCredentials: true }
       );
 
-      // Update state correctly
-      setStoreProducts((prevProducts) =>
-        prevProducts.map((product) =>
-          product._id === productId ? data.product : product
-        )
+      setStoreProducts((prev) =>
+        prev.map((p) => (p._id === productId ? data.product : p))
       );
 
       toast.success(data.message);
@@ -85,7 +84,9 @@ const StoreContextProvider = ({ children }) => {
         { withCredentials: true }
       );
       setStoreOrders(data.orders);
-    } catch (error) {}
+    } catch (error) {
+      toast.error(error.message);
+    }
   };
 
   const fetchUserStore = async () => {
@@ -95,6 +96,18 @@ const StoreContextProvider = ({ children }) => {
         { withCredentials: true }
       );
       return data;
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
+  const fetchViewStore = async (name) => {
+    try {
+      const { data } = await axios.get(
+        `${BACKEND_URL}/api/stores/view-store/${name}`,
+        { withCredentials: true }
+      );
+      setStoreData(data);
     } catch (error) {
       toast.error(error.message);
     }
@@ -111,6 +124,8 @@ const StoreContextProvider = ({ children }) => {
     setStoreOrders,
     fetchAllStoreOrders,
     fetchUserStore,
+    fetchViewStore,
+    storeData,
     currency,
   };
 
