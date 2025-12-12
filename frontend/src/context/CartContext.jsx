@@ -5,7 +5,7 @@ import toast from "react-hot-toast";
 const CartContext = createContext();
 
 export const CartContextProvider = ({ children }) => {
-  const BACKEND_URL = "http://localhost:5000";
+  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
   const [allCarts, setAllCarts] = useState([]);
   const [cartTotals, setCartTotals] = useState({
