@@ -8,6 +8,7 @@ import { LuTags } from "react-icons/lu";
 import { LuStore } from "react-icons/lu";
 
 const Dashboard = () => {
+  const currency = "₱";
   const [dashboardData, setDashBoardData] = useState(null);
 
   const fetchDashBoardData = async () => {
@@ -46,7 +47,8 @@ const Dashboard = () => {
                 Total Revenue
               </h3>
               <span className="text-2xl font-medium">
-                ${dashboardData?.totalRevenue.toLocaleString()}
+                <span className="font-semibold">{currency}</span>
+                {dashboardData?.totalRevenue.toLocaleString()}
               </span>
             </div>
             <div className="h-12 w-12 p-2.5 bg-gray-200 rounded-full overflow-hidden flex items-center justify-center">
