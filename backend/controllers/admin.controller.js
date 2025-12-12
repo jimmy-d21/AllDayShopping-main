@@ -170,7 +170,9 @@ export const rejectStore = async (req, res) => {
 
 export const getAllStores = async (req, res) => {
   try {
-    const stores = await Store.find({}).sort({ createdAt: -1 });
+    const stores = await Store.find({ requestStatus: "approve" }).sort({
+      createdAt: -1,
+    });
     res.status(200).json(stores);
   } catch (error) {
     console.error("Get All Store Error:", error.message);
