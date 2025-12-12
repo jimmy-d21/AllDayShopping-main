@@ -22,9 +22,7 @@ export const CartContextProvider = ({ children }) => {
         { withCredentials: true }
       );
       setAllCarts(data);
-    } catch (error) {
-      toast.error(error.response?.data?.error || error.message);
-    }
+    } catch (error) {}
   };
 
   const fetchAddCartItem = async (productId, quantity) => {
