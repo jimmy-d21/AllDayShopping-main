@@ -8,6 +8,7 @@ export const StoreContext = createContext();
 
 const StoreContextProvider = ({ children }) => {
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+  const currency = import.meta.env.VITE_CURRENCY;
   const navigate = useNavigate();
   const [dashboardData, setDashboardData] = useState(null);
   const [storeProducts, setStoreProducts] = useState([]);
@@ -110,6 +111,7 @@ const StoreContextProvider = ({ children }) => {
     setStoreOrders,
     fetchAllStoreOrders,
     fetchUserStore,
+    currency,
   };
 
   return (

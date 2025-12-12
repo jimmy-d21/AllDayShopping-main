@@ -9,7 +9,8 @@ import { useContext } from "react";
 import { StoreContext } from "../../context/StoreContext";
 
 const Dashboard = () => {
-  const { fetchDashboardData, dashboardData } = useContext(StoreContext);
+  const { fetchDashboardData, dashboardData, currency } =
+    useContext(StoreContext);
 
   useEffect(() => {
     fetchDashboardData();
@@ -42,7 +43,8 @@ const Dashboard = () => {
                   Total Earnings
                 </h3>
                 <span className="text-2xl font-medium">
-                  ${dashboardData?.totalEarnings.toLocaleString()}
+                  <span className="font-semibold">{currency}</span>
+                  {dashboardData?.totalEarnings.toLocaleString()}
                 </span>
               </div>
               <div className="h-12 w-12 p-2.5 bg-gray-200 rounded-full overflow-hidden flex items-center justify-center">
