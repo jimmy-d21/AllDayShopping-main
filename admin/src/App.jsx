@@ -16,10 +16,10 @@ const App = () => {
       <Routes>
         <Route
           path="/login"
-          element={!authUser ? <Login /> : <Navigate to={"/admin"} />}
+          element={!authUser ? <Login /> : <Navigate to={"/"} />}
         />
         <Route
-          path="/admin"
+          path="/"
           element={authUser ? <Layout /> : <Navigate to={"/login"} />}
         >
           <Route index element={<Dashboard />} />

@@ -10,17 +10,17 @@ const Sidebar = () => {
     {
       icon: <GoHome className="w-5 h-5" />,
       label: "Dashboard",
-      path: "/admin",
+      path: "/",
     },
     {
       icon: <LuStore className="w-5 h-5" />,
       label: "Stores",
-      path: "/admin/stores",
+      path: "/stores",
     },
     {
       icon: <GoShieldCheck className="w-5 h-5" />,
       label: "Approve Store",
-      path: "/admin/approve-store",
+      path: "/approve-store",
     },
   ];
 
