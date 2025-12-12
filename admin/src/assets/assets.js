@@ -42,3 +42,23 @@ export const dummyAllStores = [
     __v: 0,
   },
 ];
+
+export const dummyAllPendingStores = [
+  {
+    _id: "693bf5848a92b981c0e64672",
+    owner: "693bf5688a92b981c0e6466e",
+    storeLogo:
+      "https://res.cloudinary.com/dytbrbgc3/image/upload/v1765537164/elv8oh5igpwhklfk7irm.png",
+    username: "jimmyedelacruz3",
+    name: "jimmyedelacruz3Store",
+    description: "New Store",
+    email: "jimmyedelacruz3@gmail.com",
+    phone: "0937760355",
+    address: "Aim 3, village\nBlock 2 Lot 14",
+    requestStatus: "pending",
+    isActive: false,
+    createdAt: "2025-12-12T10:59:16.380Z",
+    updatedAt: "2025-12-12T10:59:16.380Z",
+    __v: 0,
+  },
+];

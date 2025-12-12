@@ -4,7 +4,7 @@ import { IoCallOutline } from "react-icons/io5";
 import { MdOutlineMail } from "react-icons/md";
 import { formatDateShort } from "../utils/formatDateShort";
 
-const StoreCard = ({ store }) => {
+const PendStoreCard = ({ store }) => {
   return (
     <div className="w-full border-gray-300 border rounded-md p-5 shadow flex flex-col text-left gap-3">
       <div className="flex items-center justify-center w-20 h-20 rounded-full overflow-hidden">
@@ -17,8 +17,8 @@ const StoreCard = ({ store }) => {
       <div className="flex items-center gap-3">
         <h1 className="text-gray-800 text-xl font-semibold">{store?.name}</h1>
         <span className="text-gray-600 font-medium">@{store?.username}</span>
-        <span className="py-1 px-4 rounded-full text-green-800 bg-green-200 text-sm font-medium">
-          {store?.requestStatus}d
+        <span className="py-1 px-4 rounded-full text-yellow-800 bg-yellow-200 text-sm font-semibold">
+          {store?.requestStatus}
         </span>
       </div>
       <p className="text-gray-600 text-sm font-medium my-2">
@@ -52,23 +52,13 @@ const StoreCard = ({ store }) => {
             </div>
             <h3 className="text-gray-800 font-semibold">{store?.name}</h3>
           </div>
-          <div className="flex items-center gap-3">
-            <span
-              className={`font-medium text-md ${
-                store?.isActive ? "text-green-600" : "text-gray-600"
-              } `}
-            >
-              {store?.isActive ? "Active" : "InActive"}
-            </span>
-            <div
-              className={`w-12 py-1 px-1 rounded-full flex items-center transition-all duration-300 cursor-pointer ${
-                store.isActive
-                  ? "bg-green-600 justify-end"
-                  : "bg-gray-300 justify-start"
-              }`}
-            >
-              <div className="h-3.5 w-3.5 bg-white rounded-full"></div>
-            </div>
+          <div className="flex items-center gap-4">
+            <button className="py-2 px-5 text-white text-sm bg-green-600 rounded-sm cursor-pointer transition-all duration-300 hover:bg-green-700">
+              Approve
+            </button>
+            <button className="py-2 px-5 text-white text-sm bg-gray-600 rounded-sm cursor-pointer transition-all duration-300 hover:bg-gray-700">
+              Reject
+            </button>
           </div>
         </div>
       </div>
@@ -76,4 +66,4 @@ const StoreCard = ({ store }) => {
   );
 };
 
-export default StoreCard;
+export default PendStoreCard;
