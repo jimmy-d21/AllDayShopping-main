@@ -25,7 +25,7 @@ const Sidebar = () => {
   ];
 
   return (
-    <div className="min-h-screen w-[240px] bg-white border-r border-gray-200 flex flex-col">
+    <div className="min-h-screen w-[250px] bg-white border-r border-gray-200 flex flex-col">
       {/* --- Logo Section --- */}
       <div className="flex flex-col items-center gap-3 py-10">
         <div className="w-[60px] h-[60px] rounded-full overflow-hidden shadow">
