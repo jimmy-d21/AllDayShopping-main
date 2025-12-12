@@ -7,7 +7,7 @@ import { useState } from "react";
 export const StoreContext = createContext();
 
 const StoreContextProvider = ({ children }) => {
-  const BACKEND_URL = "http://localhost:5000";
+  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
   const navigate = useNavigate();
   const [dashboardData, setDashboardData] = useState(null);
   const [storeProducts, setStoreProducts] = useState([]);
