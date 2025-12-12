@@ -4,7 +4,7 @@ import ProductContext from "../context/ProductContext";
 import toast from "react-hot-toast";
 
 const AddProducts = () => {
-  const { fetchCreateProduct } = useContext(ProductContext);
+  const { fetchCreateProduct, currency } = useContext(ProductContext);
   const [loading, setLoading] = useState(false);
   const [image, setImage] = useState(null);
   const [productData, setProductData] = useState({
@@ -129,7 +129,9 @@ const AddProducts = () => {
           </div>
 
           <div className="flex flex-col gap-3">
-            <h1 className="text-md font-medium text-gray-500">Price ($)</h1>
+            <h1 className="text-md font-medium text-gray-500">
+              Price ({currency})
+            </h1>
             <input
               type="number"
               name="price"

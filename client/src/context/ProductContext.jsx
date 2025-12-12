@@ -7,6 +7,7 @@ const ProductContext = createContext();
 
 export const ProductContextProvider = ({ children }) => {
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+  const currency = import.meta.env.VITE_CURRENCY;
   const [latestProducts, setLatestProducts] = useState([]);
   const [bestSellingProducts, setBestSellingProducts] = useState([]);
   const [allProducts, setAllProducts] = useState([]);
@@ -95,6 +96,7 @@ export const ProductContextProvider = ({ children }) => {
     fetchProductsDetails,
     fetchCreateProduct,
     fetchRatingProduct,
+    currency,
   };
 
   return (
