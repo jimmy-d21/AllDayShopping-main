@@ -1,21 +1,13 @@
 import React from "react";
-import { useState } from "react";
-import { dummyAdminDashboard } from "../assets/assets";
 import { useEffect } from "react";
 import { LuShoppingBasket } from "react-icons/lu";
 import { AiOutlineDollar } from "react-icons/ai";
 import { LuTags } from "react-icons/lu";
 import { LuStore } from "react-icons/lu";
+import { useAdminContext } from "../context/AdminContext";
 
 const Dashboard = () => {
-  const currency = "₱";
-  const [dashboardData, setDashBoardData] = useState(null);
-
-  const fetchDashBoardData = async () => {
-    try {
-      setDashBoardData(dummyAdminDashboard);
-    } catch (error) {}
-  };
+  const { currency, fetchDashBoardData, dashboardData } = useAdminContext();
 
   useEffect(() => {
     fetchDashBoardData();

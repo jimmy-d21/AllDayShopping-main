@@ -1,12 +1,15 @@
 import React from "react";
 import { useState } from "react";
+import { useAdminContext } from "../context/AdminContext";
 const Navbar = () => {
+  const { fetchLogoutAccount } = useAdminContext();
   const [open, setOpen] = useState(false);
   return (
     <div className="flex items-center justify-between py-5 px-10 border-b border-gray-300">
       <div className="text-green-600 font-semibold text-3xl">
         All Day <span className="text-gray-700">Shop</span>
       </div>
+
       <div
         onClick={() => setOpen((prev) => !prev)}
         className="relative flex items-center gap-3 cursor-pointer"
@@ -16,7 +19,10 @@ const Navbar = () => {
           <img src="/vite.svg" alt="" className="w-full h-full" />
         </div>
         {open && (
-          <div className="absolute top-10 right-0 bg-gray-300 border-gray-300 rounded-md py-2 px-5 shadow cursor-pointer">
+          <div
+            onClick={() => fetchLogoutAccount()}
+            className="absolute top-10 right-0 bg-gray-300 border-gray-300 rounded-md py-2 px-5 shadow cursor-pointer"
+          >
             <span className="text-gray-800 font-semibold">Logout</span>
           </div>
         )}

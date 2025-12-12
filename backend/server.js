@@ -1,20 +1,21 @@
 import express from "express";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
-import { v2 as cloudinary } from "cloudinary";
 import cors from "cors";
+import { v2 as cloudinary } from "cloudinary";
 
 import connectDB from "./db/connectDB.js";
 
 import userRoutes from "./routes/user.route.js";
-import productRoutes from "./routes/product.route.js";
 import adminRoutes from "./routes/admin.route.js";
+import productRoutes from "./routes/product.route.js";
 import storeRoutes from "./routes/store.route.js";
 import cartRoutes from "./routes/cart.route.js";
 import orderRoutes from "./routes/order.route.js";
 
 dotenv.config();
 
+// CLOUDINARY
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
@@ -23,20 +24,23 @@ cloudinary.config({
 
 const app = express();
 
-// CORS FIX — allows cookies to be sent
+// CORS (Required for cookies)
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: ["http://localhost:3000", "http://localhost:5173"],
     credentials: true,
   })
 );
 
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Credentials", "true");
+  next();
+});
+
 app.use(express.json({ limit: "5mb" }));
 app.use(cookieParser());
 
-const PORT = process.env.PORT || 5000;
-
-// API ROUTES
+// ROUTES
 app.use("/api/user", userRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/products", productRoutes);
@@ -44,8 +48,9 @@ app.use("/api/stores", storeRoutes);
 app.use("/api/carts", cartRoutes);
 app.use("/api/orders", orderRoutes);
 
-// START SERVER
+const PORT = process.env.PORT || 5000;
+
 app.listen(PORT, () => {
   connectDB();
-  console.log(`Server is ready on PORT: ${PORT}`);
+  console.log(`Server running on PORT: ${PORT}`);
 });

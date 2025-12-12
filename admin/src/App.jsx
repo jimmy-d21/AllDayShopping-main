@@ -1,19 +1,33 @@
 import React from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Layout from "./pages/Layout";
 import Dashboard from "./pages/Dashboard";
 import Stores from "./pages/Stores";
 import Approve from "./pages/Approve";
+import { Toaster } from "react-hot-toast";
+import { useAdminContext } from "./context/AdminContext";
+import Login from "./pages/Login";
 
 const App = () => {
+  const { authUser } = useAdminContext();
   return (
-    <Routes>
-      <Route path="/" element={<Layout />}>
-        <Route index element={<Dashboard />} />
-        <Route path="stores" element={<Stores />} />
-        <Route path="approve-store" element={<Approve />} />
-      </Route>
-    </Routes>
+    <>
+      <Toaster />
+      <Routes>
+        <Route
+          path="/login"
+          element={!authUser ? <Login /> : <Navigate to={"/admin"} />}
+        />
+        <Route
+          path="/admin"
+          element={authUser ? <Layout /> : <Navigate to={"/login"} />}
+        >
+          <Route index element={<Dashboard />} />
+          <Route path="stores" element={<Stores />} />
+          <Route path="approve-store" element={<Approve />} />
+        </Route>
+      </Routes>
+    </>
   );
 };
 
