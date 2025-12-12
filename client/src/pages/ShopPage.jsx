@@ -1,26 +1,36 @@
-import React from "react";
-import { dummyAllProducts } from "../assets/assets.js";
-import ProductCard from "../components/ProductCard.jsx";
-import ProductContext from "../context/ProductContext.jsx";
-import { useContext } from "react";
-import { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
+import ProductContext from "../context/ProductContext";
+import ProductCard from "../components/ProductCard";
 
 const ShopPage = () => {
   const { allProducts, fetchAllProducts } = useContext(ProductContext);
+  const [searchParams] = useSearchParams();
+
+  const searchQuery = searchParams.get("search") || "";
 
   useEffect(() => {
     fetchAllProducts();
   }, []);
 
+  const filteredProducts = allProducts.filter((product) =>
+    product.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <div className="min-h-screen max-w-[1300px] mx-auto flex flex-col pt-10 pb-40">
       <h1 className="text-2xl font-medium text-gray-600">
-        All <span className="text-gray-950">Products</span>
+        {searchQuery ? `Search Results for "${searchQuery}"` : "All Products"}
       </h1>
+
       <div className="w-full grid grid-cols-4 gap-10 mt-10">
-        {allProducts.map((product) => (
-          <ProductCard key={product?._id} product={product} />
-        ))}
+        {filteredProducts.length > 0 ? (
+          filteredProducts.map((product) => (
+            <ProductCard key={product?._id} product={product} />
+          ))
+        ) : (
+          <p className="text-gray-500 col-span-4">No products found.</p>
+        )}
       </div>
     </div>
   );

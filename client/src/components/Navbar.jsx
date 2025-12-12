@@ -12,6 +12,7 @@ const Navbar = ({ setShowLogin }) => {
   const { allCarts, fetchAllCarts } = useContext(CartContext);
 
   const [open, setOpen] = useState(false);
+  const [searchInput, setSearchInput] = useState("");
 
   const navigate = useNavigate();
 
@@ -22,23 +23,26 @@ const Navbar = ({ setShowLogin }) => {
 
   const isSeller = authUser?.role === "seller";
 
-  // Close dropdown when clicking outside
   useEffect(() => {
-    const handleClickOutside = () => {
-      setOpen(false);
-    };
+    const handleClickOutside = () => setOpen(false);
 
     document.addEventListener("click", handleClickOutside);
-    return () => {
-      document.removeEventListener("click", handleClickOutside);
-    };
+    return () => document.removeEventListener("click", handleClickOutside);
   }, []);
 
   useEffect(() => {
     fetchAllCarts();
   }, []);
 
-  // Show loading state or user info
+  // ⭐ PRESS ENTER TO SEARCH
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      if (searchInput.trim() !== "") {
+        navigate(`/shop?search=${encodeURIComponent(searchInput)}`);
+      }
+    }
+  };
+
   const renderUserSection = () => {
     if (loading) {
       return (
@@ -62,6 +66,7 @@ const Navbar = ({ setShowLogin }) => {
               className="w-full h-full object-cover"
             />
           </div>
+
           {open && (
             <div
               className="absolute right-0 top-12 min-w-48 flex flex-col gap-1 rounded-md p-2 bg-white shadow-lg border border-gray-200"
@@ -80,7 +85,7 @@ const Navbar = ({ setShowLogin }) => {
                     navigate("/store");
                     setOpen(false);
                   }}
-                  className="text-left text-gray-700 text-sm px-3 py-2 transition-all duration-200 hover:bg-gray-100 rounded-md"
+                  className="text-left text-gray-700 text-sm px-3 py-2 hover:bg-gray-100 rounded-md"
                 >
                   Store Dashboard
                 </button>
@@ -91,14 +96,14 @@ const Navbar = ({ setShowLogin }) => {
                   navigate("/order");
                   setOpen(false);
                 }}
-                className="text-left text-gray-700 text-sm px-3 py-2 transition-all duration-200 hover:bg-gray-100 rounded-md"
+                className="text-left text-gray-700 text-sm px-3 py-2 hover:bg-gray-100 rounded-md"
               >
                 My Orders
               </button>
 
               <button
                 onClick={handleLogout}
-                className="flex items-center gap-2 text-gray-700 text-sm px-3 py-2 transition-all duration-200 hover:bg-gray-100 rounded-md"
+                className="flex items-center gap-2 text-gray-700 text-sm px-3 py-2 hover:bg-gray-100 rounded-md"
               >
                 <IoLogOutOutline className="w-4 h-4" />
                 <span>Sign out</span>
@@ -112,7 +117,7 @@ const Navbar = ({ setShowLogin }) => {
     return (
       <button
         onClick={() => setShowLogin(true)}
-        className="bg-green-500 text-white font-semibold py-2 px-6 rounded-md cursor-pointer transition-all duration-300 hover:bg-green-600"
+        className="bg-green-500 text-white font-semibold py-2 px-6 rounded-md hover:bg-green-600"
       >
         Login
       </button>
@@ -133,23 +138,27 @@ const Navbar = ({ setShowLogin }) => {
           <ul className="flex items-center gap-6">
             <li
               onClick={() => navigate("/")}
-              className="text-gray-600 text-md font-medium cursor-pointer transition-colors hover:text-green-600"
+              className="cursor-pointer text-gray-600 hover:text-green-600"
             >
               Home
             </li>
             <li
               onClick={() => navigate("/shop")}
-              className="text-gray-600 text-md font-medium cursor-pointer transition-colors hover:text-green-600"
+              className="cursor-pointer text-gray-600 hover:text-green-600"
             >
               Shop
             </li>
           </ul>
 
+          {/* ⭐ SEARCH BAR (PRESS ENTER) */}
           <div className="flex items-center gap-2 bg-gray-100 py-2.5 px-4 rounded-full min-w-80 border border-gray-200">
             <CiSearch className="w-5 h-5 text-gray-500" />
             <input
               type="text"
               placeholder="Search products"
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
+              onKeyDown={handleKeyPress}
               className="w-full bg-transparent text-sm outline-none placeholder:text-gray-500"
             />
           </div>
@@ -157,7 +166,7 @@ const Navbar = ({ setShowLogin }) => {
           {authUser && (
             <div
               onClick={() => navigate("/cart")}
-              className="flex items-center gap-3 cursor-pointer transition-colors hover:text-green-600"
+              className="flex items-center gap-3 cursor-pointer hover:text-green-600"
             >
               <div className="relative">
                 {calculateTotalCartQuantity(allCarts) > 0 && (
