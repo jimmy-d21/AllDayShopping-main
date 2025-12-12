@@ -36,7 +36,7 @@ export const dummyAllStores = [
     phone: "+63 945 777 8899",
     address: "23 Kamias Road, Barangay Sikatuna Village",
     requestStatus: "approve",
-    isActive: true,
+    isActive: false,
     createdAt: "2025-12-10T14:19:51.495Z",
     updatedAt: "2025-12-10T16:03:56.960Z",
     __v: 0,
