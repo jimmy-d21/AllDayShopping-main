@@ -9,7 +9,7 @@ const Orders = () => {
   const { storeOrders, setStoreOrders, fetchAllStoreOrders } =
     useContext(StoreContext);
 
-  const { fetchUpdateStatusOrder } = useContext(OrderContext);
+  const { fetchUpdateStatusOrder, currency } = useContext(OrderContext);
 
   const handleUpdateStatusOrder = async (orderId, option) => {
     try {
@@ -55,7 +55,8 @@ const Orders = () => {
                   <td className="px-4 py-3 text-green-600">{index + 1}</td>
                   <td className="px-4 py-3">{order?.owner?.username}</td>
                   <td className="px-4 py-3 font-semibold">
-                    ${order?.total.toLocaleString()}
+                    {currency}
+                    {order?.total.toLocaleString()}
                   </td>
                   <td className="px-4 py-3">{order?.paymentMethod}</td>
                   <td className="px-4 py-3">
