@@ -93,6 +93,7 @@ export const AdminContextProvider = ({ children }) => {
     fetchLoginAccount,
     fetchLogoutAccount,
     loading,
+    navigate,
   };
 
   return (

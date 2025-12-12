@@ -2,11 +2,14 @@ import React from "react";
 import { useState } from "react";
 import { useAdminContext } from "../context/AdminContext";
 const Navbar = () => {
-  const { fetchLogoutAccount } = useAdminContext();
+  const { fetchLogoutAccount, navigate } = useAdminContext();
   const [open, setOpen] = useState(false);
   return (
     <div className="flex items-center justify-between py-5 px-10 border-b border-gray-300">
-      <div className="text-green-600 font-semibold text-3xl">
+      <div
+        onClick={() => navigate("/admin")}
+        className="text-green-600 font-semibold text-3xl cursor-pointer"
+      >
         All Day <span className="text-gray-700">Shop</span>
       </div>
 
