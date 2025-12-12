@@ -6,7 +6,7 @@ import toast from "react-hot-toast";
 const ProductContext = createContext();
 
 export const ProductContextProvider = ({ children }) => {
-  const BACKEND_URL = "http://localhost:5000";
+  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
   const [latestProducts, setLatestProducts] = useState([]);
   const [bestSellingProducts, setBestSellingProducts] = useState([]);
   const [allProducts, setAllProducts] = useState([]);
