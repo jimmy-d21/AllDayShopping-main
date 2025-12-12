@@ -6,7 +6,7 @@ import toast from "react-hot-toast";
 const OrderContext = createContext();
 
 export const OrderContextProvider = ({ children }) => {
-  const BACKEND_URL = "http://localhost:5000";
+  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
   const [allOrders, setAllOrders] = useState([]);
 
   const fetchAllOrders = async () => {
