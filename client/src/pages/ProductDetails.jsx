@@ -15,7 +15,7 @@ import toast from "react-hot-toast";
 
 const ProductDetails = ({ setShowLogin }) => {
   const { authUser } = useContext(UserContext);
-  const { fetchProductsDetails } = useContext(ProductContext);
+  const { fetchProductsDetails, currency } = useContext(ProductContext);
   const { fetchAddCartItem } = useContext(CartContext);
   const { id: productId } = useParams();
   const navigate = useNavigate();
@@ -79,7 +79,8 @@ const ProductDetails = ({ setShowLogin }) => {
               </span>
             </div>
             <h3 className="text-2xl text-gray-800 mt-8 font-semibold">
-              ${productDetails?.price.toLocaleString()}
+              {currency}
+              {productDetails?.price.toLocaleString()}
             </h3>
             <p className="mt-8 mb-3 text-md font-semibold">Quantity :</p>
             <div className="flex items-center">
@@ -134,16 +135,18 @@ const ProductDetails = ({ setShowLogin }) => {
             >
               Description
             </span>
-            <span
-              onClick={() => setState("Reviews")}
-              className={`text-sm font-semibold cursor-pointer py-2 px-3 ${
-                state === "Reviews"
-                  ? "border-b text-gray-600 border-gray-600"
-                  : "text-gray-400"
-              }`}
-            >
-              Reviews
-            </span>
+            {productDetails?.reviews.length > 0 && (
+              <span
+                onClick={() => setState("Reviews")}
+                className={`text-sm font-semibold cursor-pointer py-2 px-3 ${
+                  state === "Reviews"
+                    ? "border-b text-gray-600 border-gray-600"
+                    : "text-gray-400"
+                }`}
+              >
+                Reviews
+              </span>
+            )}
           </div>
           {isDescription && (
             <h3 className="text-gray-600 text-sm">
