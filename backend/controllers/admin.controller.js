@@ -107,10 +107,8 @@ export const getAdminDashboard = async (req, res) => {
     const totalStores = await Store.find({}); // Collect all the stores
     const totalProducts = await Product.find({}); // Collect all the products
     const totalOrders = await Order.find({});
-    const totalRevenue = await Order.find({ status: "delivered" }).reduce(
-      (sum, order) => sum + order.total,
-      0
-    );
+    const orders = await Order.find({ status: "DELIVERED" });
+    const totalRevenue = orders.reduce((sum, order) => sum + order.total, 0);
 
     res.status(200).json({
       totalStores: totalStores.length,
