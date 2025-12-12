@@ -9,14 +9,13 @@ const ShopPage = () => {
 
   const searchQuery = searchParams.get("search") || "";
 
-  useEffect(() => {
-    fetchAllProducts();
-  }, []);
-
   const filteredProducts = allProducts.filter((product) =>
     product.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  useEffect(() => {
+    fetchAllProducts();
+  }, []);
   return (
     <div className="min-h-screen max-w-[1300px] mx-auto flex flex-col pt-10 pb-40">
       <h1 className="text-2xl font-medium text-gray-600">
