@@ -2,8 +2,12 @@ import React, { useEffect, useContext } from "react";
 import { StoreContext } from "../../context/StoreContext";
 
 const ManageProduct = () => {
-  const { fetchAllStoreProducts, storeProducts, fetchUpdateActiveProduct } =
-    useContext(StoreContext);
+  const {
+    fetchAllStoreProducts,
+    storeProducts,
+    fetchUpdateActiveProduct,
+    currency,
+  } = useContext(StoreContext);
 
   const handleToggleProduct = async (productId) => {
     await fetchUpdateActiveProduct(productId);
@@ -44,7 +48,8 @@ const ManageProduct = () => {
                     {product.description}
                   </td>
                   <td className="px-4 py-3 font-medium">
-                    ${product.price.toLocaleString()}
+                    {currency}
+                    {product.price.toLocaleString()}
                   </td>
                   <td className="px-4 py-3">
                     <div
